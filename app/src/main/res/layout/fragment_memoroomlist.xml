@@ -9,11 +9,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvMemoRoomList"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{vm.testStr}"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:bindRecyclerViewAdapter="@{vm.memoRoomAdapter}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
