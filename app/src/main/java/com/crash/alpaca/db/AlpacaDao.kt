@@ -1,5 +1,6 @@
 package com.crash.alpaca.db
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -15,11 +16,11 @@ interface AlpacaDao {
     fun deleteMemoRoom(memoRoom: MemoRoom)
 
     @Query("SELECT * FROM memoroom WHERE id = :id")
-    fun findMemoRoom(id: Int): MemoRoom?
+    fun findMemoRoom(id: Int): LiveData<MemoRoom?>
 
     @Query("SELECT * FROM memoroom")
-    fun getAllMemoRoomList(): List<MemoRoom>
+    fun getAllMemoRoomList(): LiveData<List<MemoRoom>>
 
     @Query("SELECT * FROM memoroom WHERE hidden = :isHidden")
-    fun getMemoRoomList(@MemoRoom.Visibility isHidden: Int): List<MemoRoom>
+    fun getMemoRoomList(@MemoRoom.Visibility isHidden: Int): LiveData<List<MemoRoom>>
 }

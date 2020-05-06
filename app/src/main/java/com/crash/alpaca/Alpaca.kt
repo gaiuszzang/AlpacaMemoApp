@@ -8,6 +8,7 @@ import com.crash.alpaca.db.AlpacaDatabase
 class Alpaca : Application() {
     companion object {
         lateinit var instance: Alpaca
+        var DEBUG = true // TODO: Need to create settings
     }
 
     val context: Context by lazy { applicationContext }

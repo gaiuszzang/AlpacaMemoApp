@@ -12,7 +12,7 @@ import androidx.room.Entity
  *     title TEXT NOT NULL,
  *     desc TEXT,
  *     roomtype INTEGER DEFAULT 0
- *     hidden INTEGER DEFAULT 1
+ *     hidden INTEGER DEFAULT 0
  *     password TEXT
  * )
  */
@@ -21,12 +21,12 @@ data class MemoRoom(
     val id: Int,
     val title: String,
     @ColumnInfo(name = "desc")
-        val description: String?,
+    val description: String?,
     @ColumnInfo(name = "roomtype")
-        @RoomType
-        val roomType: Int = TYPE_NORMAL,
+    @RoomType
+    val roomType: Int = TYPE_NORMAL,
     @Visibility
-        val hidden: Int = VISIBILITY_SHOW,
+    val hidden: Int = VISIBILITY_SHOW,
     val password: String? = null
 ) {
     @IntDef(value = [
