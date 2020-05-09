@@ -23,4 +23,7 @@ interface AlpacaDao {
 
     @Query("SELECT * FROM memoroom WHERE hidden = :isHidden")
     fun getMemoRoomList(@MemoRoom.Visibility isHidden: Int): LiveData<List<MemoRoom>>
+
+    @Query("SELECT MAX(id) FROM memoroom")
+    fun getMaxMemoRoomId(): Int
 }
