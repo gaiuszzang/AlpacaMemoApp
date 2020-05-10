@@ -4,30 +4,57 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data class="MemoRoomItemLayoutBind">
+        <import type="android.view.View" />
+        <import type="android.view.View.OnClickListener"/>
+        <import type="android.view.View.OnLongClickListener"/>
         <variable name="memoRoom" type="com.crash.alpaca.data.MemoRoom" />
+        <variable name="isSelected" type="boolean" />
+        <variable name="itemClickListener" type="OnClickListener"/>
+        <variable name="itemLongClickListener" type="OnLongClickListener"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:clickable="true"
         android:foreground="?android:attr/selectableItemBackground"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@{isSelected ? @color/colorSelect : @color/colorNoSelect}"
+        android:padding="10dp"
+        android:onClick="@{itemClickListener}"
+        app:bindLongClickListener="@{itemLongClickListener}">
+        <androidx.constraintlayout.widget.Guideline
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/guideline"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.5"/>
+        <ImageView
+            android:id="@+id/memoRoomIcon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <ImageView
+            android:id="@+id/memoRoomCheck"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_checkmark_outline"
+            android:visibility="@{isSelected ? View.VISIBLE : View.GONE}"
+            app:layout_constraintRight_toRightOf="@id/memoRoomIcon"
+            app:layout_constraintBottom_toBottomOf="@id/memoRoomIcon"/>
         <TextView
             android:id="@+id/memoRoomTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{memoRoom.title}"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
-
+            app:layout_constraintLeft_toRightOf="@id/memoRoomIcon"
+            app:layout_constraintBottom_toTopOf="@id/guideline"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{memoRoom.description}"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/memoRoomTitle"/>
+            app:layout_constraintLeft_toRightOf="@id/memoRoomIcon"
+            app:layout_constraintTop_toBottomOf="@id/guideline"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -2,10 +2,22 @@
 <menu
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
+    <!-- Non Select Mode -->
     <item
         android:id="@+id/menuAdd"
         android:title="Add"
         android:icon="@drawable/ic_plus_outline"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/menuSetting"
+        android:title="Setting"
+        android:icon="@drawable/ic_settings_outline"
+        app:showAsAction="ifRoom"/>
+
+    <!-- Select Mode -->
+    <item
+        android:id="@+id/menuRemove"
+        android:title="Remove"
+        android:icon="@drawable/ic_trash_outline"
         app:showAsAction="ifRoom"/>
 </menu>
