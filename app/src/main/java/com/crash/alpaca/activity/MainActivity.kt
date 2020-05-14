@@ -6,11 +6,8 @@ import com.crash.alpaca.R
 import com.crash.alpaca.fragment.MemoRoomListFragment
 
 class MainActivity : AppCompatActivity() {
-    interface IBackPressCallback {
-        fun onBackPressed(): Boolean
-    }
 
-    var backPressCallback: IBackPressCallback? = null
+    var backPressCallback: (() -> Boolean)? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,17 +18,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (backPressCallback == null || !backPressCallback!!.onBackPressed()) {
-            super.onBackPressed()
-        }
+        backPressCallback?.invoke()?.also {
+            if (!it) {
+                super.onBackPressed()
+            }
+        } ?: super.onBackPressed()
     }
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
-    }
-
-    fun addBackPressCallback(cb: IBackPressCallback) {
-        backPressCallback = cb
     }
 }
