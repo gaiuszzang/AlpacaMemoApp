@@ -1,19 +1,92 @@
 package com.crash.alpaca.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import com.crash.alpaca.Alpaca
 import com.crash.alpaca.R
+import com.crash.alpaca.data.Memo
+import com.crash.alpaca.databinding.MemoRoomFragmentBind
+import com.crash.alpaca.db.AlpacaRepository
+import kotlinx.coroutines.*
 
 class MemoRoomFragment : Fragment() {
+    companion object {
+        val TAG = "MemoRoomFragment"
+    }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_memoroom, container, false)
+    private val vm: MemoRoomFragmentViewModel by viewModels()
+    lateinit var bind: MemoRoomFragmentBind
+
+    private val scope = CoroutineScope(Dispatchers.Main + Job())
+    private val ioThread = if (Alpaca.DEBUG) Dispatchers.Main else Dispatchers.IO
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        // Setting ViewModel
+        //vm.context = this.requireContext()
+        vm.loadMemo().observe(viewLifecycleOwner, Observer {
+            vm.updateItems(it)
+            scrollToLastItem()
+        })
+        if (!vm.memoRoomAdapter.hasObservers()) {
+            vm.memoRoomAdapter.setHasStableIds(true) //Don't remove.
+        }
+        vm.plusClickListener = {
+            scrollToLastItem() //Temp
+        }
+        vm.writeClickListener = {
+            addMemo()
+        }
+
+        // Setting Bind
+        bind = DataBindingUtil.inflate(inflater, R.layout.fragment_memoroom, container, false)
+        bind.lifecycleOwner = this
+        bind.vm = vm
+        setSupportActionBar(bind.toolbar)
+
+        // Scroll to Last Item
+        postScrollToLastItem()
+
+        return bind.root
+    }
+
+    fun addMemo() {
+        scope.launch {
+            val content = vm.userMsg.value?: ""
+            if (!content.equals("")) {
+                val msgId = System.currentTimeMillis().toString() //TODO
+                async(ioThread) {
+                    val memo = Memo(msgId, content)
+                    AlpacaRepository.alpacaDao().insertMemo(memo)
+                }.await()
+                vm.userMsg.value = "";
+            }
+        }
+    }
+
+    fun scrollToLastItem() {
+        Log.d(TAG, "scrollToLastItem()")
+        //bind.rvMemoList.scrollToPosition(0)
+        bind.rvMemoList.scrollToPosition(vm.memoRoomAdapter.itemCount - 1)
+        postScrollToLastItem()
+    }
+    // There is one issue that when itemview height is different, scrolling not working well.
+    // so I add the postScroll Method
+    fun postScrollToLastItem() {
+        bind.rvMemoList.viewTreeObserver.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                Log.d(TAG, "scrollToLastItem() 2")
+                bind.rvMemoList.scrollToPosition(vm.memoRoomAdapter.itemCount - 1)
+                bind.rvMemoList.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        })
     }
 }

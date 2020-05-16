@@ -17,4 +17,10 @@ object AlpacaBindingAdapter {
     fun bindLongClickListener(view: View, listener: View.OnLongClickListener) {
         view.setOnLongClickListener(listener)
     }
+
+    @JvmStatic
+    @BindingAdapter("bindRecyclerViewAnimator")
+    fun bindRecyclerViewAnimator(rcView: RecyclerView, animator: RecyclerView.ItemAnimator?) {
+        rcView.itemAnimator = animator
+    }
 }

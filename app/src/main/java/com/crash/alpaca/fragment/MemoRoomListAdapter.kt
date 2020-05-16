@@ -16,10 +16,7 @@ class MemoRoomListAdapter : RecyclerView.Adapter<MemoRoomListAdapter.MemoRoomVie
     var onItemClickListener: (MemoRoom) -> Unit = {}
     var onSelectModeChangedListener: (Boolean) -> Unit = {}
 
-    inner class MemoRoomViewHolder(
-        private val bind: MemoRoomItemLayoutBind
-    ) : RecyclerView.ViewHolder(bind.root) {
-
+    inner class MemoRoomViewHolder(private val bind: MemoRoomItemLayoutBind) : RecyclerView.ViewHolder(bind.root) {
         fun bind(pos: Int, item: MemoRoom, isSelected: Boolean) {
             bind.memoRoom = item
             bind.isSelected = isSelectMode && isSelected

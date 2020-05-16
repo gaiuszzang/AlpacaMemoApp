@@ -7,28 +7,29 @@ import com.crash.alpaca.db.AlpacaRepository
 
 class MemoRoomListFragmentViewModel : ViewModel() {
 
-    val memoRoomAdapter = MemoRoomListAdapter()
+    val memoRoomListAdapter = MemoRoomListAdapter()
 
     fun updateItems(items: List<MemoRoom>) {
-        memoRoomAdapter.updateList(items)
+        memoRoomListAdapter.updateList(items)
     }
 
     fun setOnItemClickListener(listener: (MemoRoom) -> Unit) {
-        memoRoomAdapter.onItemClickListener = listener
+        memoRoomListAdapter.onItemClickListener = listener
     }
 
     fun setOnSelectModeChangedListener(listener: (Boolean) -> Unit) {
-        memoRoomAdapter.onSelectModeChangedListener = listener
+        memoRoomListAdapter.onSelectModeChangedListener = listener
     }
 
+    //TODO : should be Refactoring. ViewModel should be don't know Dao.
     fun loadMemoRooms(): LiveData<List<MemoRoom>> {
         return AlpacaRepository.alpacaDao().getAllMemoRoomList()
     }
 
-    fun setSelectMode(isOn: Boolean) = memoRoomAdapter.setSelectMode(isOn)
+    fun setSelectMode(isOn: Boolean) = memoRoomListAdapter.setSelectMode(isOn)
 
-    fun getSelectMode(): Boolean = memoRoomAdapter.getSelectMode()
+    fun getSelectMode(): Boolean = memoRoomListAdapter.getSelectMode()
 
-    fun getSelectItemList(): List<MemoRoom> = memoRoomAdapter.getSelectItemList()
+    fun getSelectItemList(): List<MemoRoom> = memoRoomListAdapter.getSelectItemList()
 }
 

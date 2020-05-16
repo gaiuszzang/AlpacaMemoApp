@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import com.crash.alpaca.data.Memo
 import com.crash.alpaca.data.MemoRoom
 
 @Dao
@@ -15,8 +16,8 @@ interface AlpacaDao {
     @Delete
     fun deleteMemoRoom(memoRoom: MemoRoom)
 
-    @Query("DELETE FROM memoroom WHERE id = :id")
-    fun deleteMemoRoom(id: Int)
+    //@Query("DELETE FROM memoroom WHERE id = :id")
+    //fun deleteMemoRoom(id: Int)
 
     @Query("SELECT * FROM memoroom WHERE id = :id")
     fun findMemoRoom(id: Int): LiveData<MemoRoom?>
@@ -29,4 +30,13 @@ interface AlpacaDao {
 
     @Query("SELECT MAX(id) FROM memoroom")
     fun getMaxMemoRoomId(): Int
+
+    @Insert
+    fun insertMemo(memo: Memo)
+
+    @Delete
+    fun deleteMemo(memo: Memo)
+
+    @Query("SELECT * FROM memo") //TODO : WHERE memoroomId = :memoRoomId
+    fun getMemoList(): LiveData<List<Memo>>
 }

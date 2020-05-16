@@ -25,7 +25,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class MemoRoomListFragment : Fragment() {
-
     companion object {
         private const val TAG = "MemoRoomListFragment"
     }
@@ -34,8 +33,8 @@ class MemoRoomListFragment : Fragment() {
     lateinit var menu: Menu
     lateinit var bind: MemoRoomListFragmentBind
 
-    private val job = Job()
-    private val scope = CoroutineScope(Dispatchers.Main + job)
+    private val scope = CoroutineScope(Dispatchers.Main + Job())
+    private val ioThread = if (Alpaca.DEBUG) Dispatchers.Main else Dispatchers.IO
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,6 +49,9 @@ class MemoRoomListFragment : Fragment() {
         }
         vm.setOnSelectModeChangedListener {
             updateActionBarMenu(it)
+        }
+        if (!vm.memoRoomListAdapter.hasObservers()) {
+            vm.memoRoomListAdapter.setHasStableIds(true) //Don't remove.
         }
 
         bind = DataBindingUtil.inflate(inflater, R.layout.fragment_memoroomlist, container, false)
@@ -87,7 +89,6 @@ class MemoRoomListFragment : Fragment() {
             R.id.menuSetting -> setFragment(SettingFragment())
             R.id.menuRemove -> {
                 scope.launch {
-                    val ioThread = if (Alpaca.DEBUG) Dispatchers.Main else Dispatchers.IO
                     withContext(ioThread) {
                         removeMemoRoomSelected()
                     }
@@ -99,11 +100,11 @@ class MemoRoomListFragment : Fragment() {
     }
 
     fun getSelectMode(): Boolean {
-        return bind.vm?.getSelectMode() ?: false
+        return vm.getSelectMode()
     }
 
     fun setSelectMode(isOn: Boolean) {
-        bind.vm?.setSelectMode(isOn)
+        vm.setSelectMode(isOn)
     }
 
     private fun updateActionBarMenu(isSelectMode: Boolean) {
@@ -115,7 +116,6 @@ class MemoRoomListFragment : Fragment() {
 
     private fun createNewMemoRoom() {
         scope.launch {
-            val ioThread = if (Alpaca.DEBUG) Dispatchers.Main else Dispatchers.IO
             val memoRoomId = async(ioThread) {
                 return@async AlpacaRepository.alpacaDao().getMaxMemoRoomId() + 1
             }.await()
@@ -133,8 +133,8 @@ class MemoRoomListFragment : Fragment() {
     }
 
     private fun removeMemoRoomSelected() {
-        bind.vm?.getSelectItemList()?.forEach {
-            AlpacaRepository.alpacaDao().deleteMemoRoom(it.id)
+        vm.getSelectItemList().forEach {
+            AlpacaRepository.alpacaDao().deleteMemoRoom(it)
         }
     }
 }

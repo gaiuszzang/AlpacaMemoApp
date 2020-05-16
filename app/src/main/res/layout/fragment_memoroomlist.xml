@@ -40,8 +40,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:bindRecyclerViewAdapter="@{vm.memoRoomAdapter}"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            />
+            app:bindRecyclerViewAdapter="@{vm.memoRoomListAdapter}"
+            app:bindRecyclerViewAnimator="@{null}"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

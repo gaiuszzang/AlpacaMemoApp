@@ -6,4 +6,10 @@
 
     <color name="colorNoSelect">#0000</color>
     <color name="colorSelect">#10101010</color>
+
+    <color name="colorNoWrite">#a0a0a0</color>
+    <color name="colorWrite">#000000</color>
+
+    <color name="colorMemo">#00d0f0</color>
+    <color name="colorMemoText">#fafafa</color>
 </resources>
