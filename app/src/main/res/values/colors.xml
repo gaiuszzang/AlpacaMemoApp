@@ -11,5 +11,6 @@
     <color name="colorWrite">#000000</color>
 
     <color name="colorMemo">#00d0f0</color>
+    <color name="colorMemoClick">#00caea</color>
     <color name="colorMemoText">#fafafa</color>
 </resources>

@@ -20,7 +20,8 @@ object AlpacaRepository {
             MemoRoom(5, "Test Room 5", "This is Description of Room 5")
         )
         val memoList : ArrayList<Memo> = arrayListOf(
-            Memo("0", "Hello, World")
+            Memo("0", "Hello, World"),
+            Memo("1", "Alpaca Memo Application\nTest Memo")
         )
 
         val liveDataMemoRoomList : MutableLiveData<List<MemoRoom>> = MutableLiveData(memoRoomList)
