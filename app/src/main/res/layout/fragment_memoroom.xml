@@ -26,6 +26,7 @@
             android:id="@+id/lyIME"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:background="#efefef"
             app:layout_constraintBottom_toBottomOf="parent">
             <ImageView
                 android:id="@+id/imgPlus"
@@ -51,6 +52,7 @@
                 android:layout_height="wrap_content"
                 android:hint="enter memo"
                 android:text="@={vm.userMsg}"
+                android:maxLines="4"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/imgPlus"
