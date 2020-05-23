@@ -53,7 +53,8 @@ class MemoRoomAdapter : RecyclerView.Adapter<MemoRoomAdapter.MemoRoomViewHolder>
     }
 
     override fun getItemId(position: Int) : Long {
-        return itemList[position].id.toLong() //TODO
+        //return itemList[position].id.toLong() //TODO
+        return itemList[position].time;
     }
 
     fun updateList(list: List<Memo>) {

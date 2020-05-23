@@ -76,7 +76,8 @@ object AlpacaRepository {
             liveDataMemoList.value = memoList
         }
 
-        override fun getMemoList(): LiveData<List<Memo>> {
+        override fun getMemoList(roomId: Int): LiveData<List<Memo>> {
+            //Test Code don't have roomId
             return liveDataMemoList
         }
     }) else null

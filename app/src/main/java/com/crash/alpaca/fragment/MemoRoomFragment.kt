@@ -16,8 +16,9 @@ import com.crash.alpaca.data.Memo
 import com.crash.alpaca.databinding.MemoRoomFragmentBind
 import com.crash.alpaca.db.AlpacaRepository
 import kotlinx.coroutines.*
+import java.util.*
 
-class MemoRoomFragment : Fragment() {
+class MemoRoomFragment(private val roomId: Int) : Fragment() {
     companion object {
         val TAG = "MemoRoomFragment"
     }
@@ -28,10 +29,11 @@ class MemoRoomFragment : Fragment() {
     private val scope = CoroutineScope(Dispatchers.Main + Job())
     private val ioThread = if (Alpaca.DEBUG) Dispatchers.Main else Dispatchers.IO
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Setting ViewModel
         vm.context = this.requireContext()
-        vm.loadMemo().observe(viewLifecycleOwner, Observer {
+        vm.loadMemo(roomId).observe(viewLifecycleOwner, Observer {
             vm.updateItems(it)
             scrollToLastItem()
         })
@@ -58,9 +60,9 @@ class MemoRoomFragment : Fragment() {
         scope.launch {
             val content = vm.userMsg.value?: ""
             if (!content.equals("")) {
-                val msgId = System.currentTimeMillis().toString() //TODO
+                val msgId =  UUID.randomUUID().toString()
                 async(ioThread) {
-                    val memo = Memo(msgId, 0, content, 0)
+                    val memo = Memo(msgId, roomId, content, System.currentTimeMillis())
                     AlpacaRepository.alpacaDao().insertMemo(memo)
                 }.await()
                 vm.userMsg.value = "";

@@ -30,8 +30,8 @@ class MemoRoomFragmentViewModel : ViewModel() {
     }
 
     //TODO : should be Refactoring. ViewModel should be don't know Dao.
-    fun loadMemo(): LiveData<List<Memo>> {
-        return AlpacaRepository.alpacaDao().getMemoList()
+    fun loadMemo(roomId: Int): LiveData<List<Memo>> {
+        return AlpacaRepository.alpacaDao().getMemoList(roomId)
     }
 
     fun setSelectMode(isOn: Boolean) = memoRoomAdapter.setSelectMode(isOn)

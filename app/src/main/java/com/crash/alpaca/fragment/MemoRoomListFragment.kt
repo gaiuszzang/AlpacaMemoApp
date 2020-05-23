@@ -45,7 +45,7 @@ class MemoRoomListFragment : Fragment() {
             vm.updateItems(it)
         })
         vm.setOnItemClickListener {
-            setFragment(MemoRoomFragment())
+            setFragment(MemoRoomFragment(it.id))
         }
         vm.setOnSelectModeChangedListener {
             updateActionBarMenu(it)

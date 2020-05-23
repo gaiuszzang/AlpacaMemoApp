@@ -37,6 +37,6 @@ interface AlpacaDao {
     @Delete
     fun deleteMemo(memo: Memo)
 
-    @Query("SELECT * FROM memo") //TODO : WHERE memoroomId = :memoRoomId
-    fun getMemoList(): LiveData<List<Memo>>
+    @Query("SELECT * FROM memo WHERE room_id = :roomId ORDER BY time ASC")
+    fun getMemoList(roomId: Int): LiveData<List<Memo>>
 }
