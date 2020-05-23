@@ -10,7 +10,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import com.crash.alpaca.Alpaca
 import com.crash.alpaca.R
 import com.crash.alpaca.data.Memo
@@ -64,7 +63,7 @@ class MemoRoomFragment : Fragment() {
             if (!content.equals("")) {
                 val msgId = System.currentTimeMillis().toString() //TODO
                 async(ioThread) {
-                    val memo = Memo(msgId, content)
+                    val memo = Memo(msgId, 0, content, 0)
                     AlpacaRepository.alpacaDao().insertMemo(memo)
                 }.await()
                 vm.userMsg.value = "";
