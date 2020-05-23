@@ -13,7 +13,9 @@ class MemoRoomFragmentViewModel : ViewModel() {
     val memoRoomAdapter = MemoRoomAdapter()
     var plusClickListener: () -> Unit = {}
     var writeClickListener: () -> Unit = {}
-    //lateinit var context: Context
+    var isListLastPosition = MutableLiveData(false)
+
+    lateinit var context: Context
 
     fun updateItems(items: List<Memo>) {
         memoRoomAdapter.updateList(items)
@@ -38,12 +40,10 @@ class MemoRoomFragmentViewModel : ViewModel() {
 
     fun getSelectItemList(): List<Memo> = memoRoomAdapter.getSelectItemList()
 
-    /*
-    fun getReverseLayoutManager() : LinearLayoutManager {
+    fun getLayoutManager() : LinearLayoutManager {
         val lyManager = LinearLayoutManager(context)
-        lyManager.reverseLayout = true
+        //lyManager.reverseLayout = true
         lyManager.stackFromEnd = true
         return lyManager
     }
-    */
 }

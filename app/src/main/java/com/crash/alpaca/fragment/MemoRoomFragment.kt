@@ -30,7 +30,7 @@ class MemoRoomFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Setting ViewModel
-        //vm.context = this.requireContext()
+        vm.context = this.requireContext()
         vm.loadMemo().observe(viewLifecycleOwner, Observer {
             vm.updateItems(it)
             scrollToLastItem()
@@ -51,9 +51,6 @@ class MemoRoomFragment : Fragment() {
         bind.vm = vm
         setSupportActionBar(bind.toolbar)
 
-        // Scroll to Last Item
-        postScrollToLastItem()
-
         return bind.root
     }
 
@@ -72,8 +69,6 @@ class MemoRoomFragment : Fragment() {
     }
 
     fun scrollToLastItem() {
-        Log.d(TAG, "scrollToLastItem()")
-        //bind.rvMemoList.scrollToPosition(0)
         bind.rvMemoList.scrollToPosition(vm.memoRoomAdapter.itemCount - 1)
         postScrollToLastItem()
     }
@@ -82,7 +77,6 @@ class MemoRoomFragment : Fragment() {
     fun postScrollToLastItem() {
         bind.rvMemoList.viewTreeObserver.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
-                Log.d(TAG, "scrollToLastItem() 2")
                 bind.rvMemoList.scrollToPosition(vm.memoRoomAdapter.itemCount - 1)
                 bind.rvMemoList.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
