@@ -18,7 +18,7 @@ import com.crash.alpaca.db.AlpacaRepository
 import kotlinx.coroutines.*
 import java.util.*
 
-class MemoRoomFragment(private val roomId: Int) : Fragment() {
+class MemoRoomFragment(private val roomId: Int, private val roomTitle: String) : Fragment() {
     companion object {
         val TAG = "MemoRoomFragment"
     }
@@ -52,6 +52,10 @@ class MemoRoomFragment(private val roomId: Int) : Fragment() {
         bind.lifecycleOwner = this
         bind.vm = vm
         setSupportActionBar(bind.toolbar)
+
+        // Setting BackButton to ActionBark
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setTitle(roomTitle)
 
         return bind.root
     }

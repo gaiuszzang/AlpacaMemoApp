@@ -13,4 +13,5 @@
     <color name="colorMemo">#00d0f0</color>
     <color name="colorMemoClick">#00caea</color>
     <color name="colorMemoText">#fafafa</color>
+    <color name="colorMemoTimestamp">#808080</color>
 </resources>
