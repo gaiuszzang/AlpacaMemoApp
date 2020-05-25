@@ -1,7 +1,6 @@
 package com.crash.alpaca.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,13 +9,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import com.crash.alpaca.Alpaca
 import com.crash.alpaca.R
-import com.crash.alpaca.data.Memo
 import com.crash.alpaca.databinding.MemoRoomFragmentBind
-import com.crash.alpaca.db.AlpacaRepository
-import kotlinx.coroutines.*
-import java.util.*
 
 class MemoRoomFragment() : Fragment() {
     companion object {
@@ -25,12 +19,7 @@ class MemoRoomFragment() : Fragment() {
 
     private val vm: MemoRoomFragmentViewModel by viewModels()
     lateinit var bind: MemoRoomFragmentBind
-
-    private val scope = CoroutineScope(Dispatchers.Main + Job())
-    private val ioThread = if (Alpaca.DEBUG) Dispatchers.Main else Dispatchers.IO
-
     private var roomId: Int = -1
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         roomId = requireArguments().getInt("roomId", -1)
@@ -66,17 +55,7 @@ class MemoRoomFragment() : Fragment() {
     }
 
     fun addMemo() {
-        scope.launch {
-            val content = vm.userMsg.value?: ""
-            if (!content.equals("")) {
-                val msgId =  UUID.randomUUID().toString()
-                async(ioThread) {
-                    val memo = Memo(msgId, roomId, content, System.currentTimeMillis())
-                    AlpacaRepository.alpacaDao().insertMemo(memo)
-                }.await()
-                vm.userMsg.value = "";
-            }
-        }
+        vm.addMemo(roomId)
     }
 
     fun scrollToLastItem() {
