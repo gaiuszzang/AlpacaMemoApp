@@ -18,7 +18,7 @@ import com.crash.alpaca.db.AlpacaRepository
 import kotlinx.coroutines.*
 import java.util.*
 
-class MemoRoomFragment(private val roomId: Int, private val roomTitle: String) : Fragment() {
+class MemoRoomFragment() : Fragment() {
     companion object {
         val TAG = "MemoRoomFragment"
     }
@@ -29,13 +29,19 @@ class MemoRoomFragment(private val roomId: Int, private val roomTitle: String) :
     private val scope = CoroutineScope(Dispatchers.Main + Job())
     private val ioThread = if (Alpaca.DEBUG) Dispatchers.Main else Dispatchers.IO
 
+    private var roomId: Int = -1
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        roomId = requireArguments().getInt("roomId", -1)
         // Setting ViewModel
         vm.context = this.requireContext()
         vm.loadMemo(roomId).observe(viewLifecycleOwner, Observer {
             vm.updateItems(it)
             scrollToLastItem()
+        })
+        vm.loadMemoRoom(roomId).observe(viewLifecycleOwner, Observer {
+            supportActionBar?.title = it?.title
         })
         if (!vm.memoRoomAdapter.hasObservers()) {
             vm.memoRoomAdapter.setHasStableIds(true) //Don't remove.
@@ -55,7 +61,6 @@ class MemoRoomFragment(private val roomId: Int, private val roomTitle: String) :
 
         // Setting BackButton to ActionBark
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setTitle(roomTitle)
 
         return bind.root
     }

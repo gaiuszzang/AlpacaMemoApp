@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.crash.alpaca.data.Memo
+import com.crash.alpaca.data.MemoRoom
 import com.crash.alpaca.db.AlpacaRepository
 
 class MemoRoomFragmentViewModel : ViewModel() {
@@ -29,9 +30,12 @@ class MemoRoomFragmentViewModel : ViewModel() {
         memoRoomAdapter.onSelectModeChangedListener = listener
     }
 
-    //TODO : should be Refactoring. ViewModel should be don't know Dao.
     fun loadMemo(roomId: Int): LiveData<List<Memo>> {
         return AlpacaRepository.alpacaDao().getMemoList(roomId)
+    }
+
+    fun loadMemoRoom(roomId: Int): LiveData<MemoRoom?> {
+        return AlpacaRepository.alpacaDao().findMemoRoom(roomId)
     }
 
     fun setSelectMode(isOn: Boolean) = memoRoomAdapter.setSelectMode(isOn)
