@@ -5,6 +5,7 @@
     >
     <data class="MemoRoomFragmentBind">
         <variable name="vm" type="com.crash.alpaca.fragment.MemoRoomFragmentViewModel" />
+        <variable name="callback" type="com.crash.alpaca.fragment.MemoRoomFragment.MemoRoomFragmentCallback"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -32,7 +33,7 @@
                 style="@style/IMEImageStyle"
                 android:id="@+id/imgPlus"
                 android:src="@drawable/ic_plus_outline"
-                android:onClick="@{(v) -> vm.plusClickListener.invoke()}"
+                android:onClick="@{(v) -> callback.onClickPlus()}"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent" />
@@ -41,7 +42,7 @@
                 android:id="@+id/imgWrite"
                 android:src="@drawable/ic_write_outline"
                 android:tint="@{(vm.userMsg == null || vm.userMsg.empty) ? @color/colorNoWrite : @color/colorWrite}"
-                android:onClick="@{(v) -> vm.writeClickListener.invoke()}"
+                android:onClick="@{(v) -> callback.onClickAddMemo()}"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent" />
@@ -68,7 +69,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layoutManager="@{vm.getLayoutManager()}"
-                app:bindRecyclerViewAdapter="@{vm.memoRoomAdapter}"
                 app:bindRecyclerViewAnimator="@{null}"/>
         </RelativeLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

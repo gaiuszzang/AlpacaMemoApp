@@ -14,27 +14,11 @@ import java.util.*
 
 class MemoRoomFragmentViewModel : ViewModel() {
     var userMsg = MutableLiveData<String>()
-    val memoRoomAdapter = MemoRoomAdapter()
-    var plusClickListener: () -> Unit = {}
-    var writeClickListener: () -> Unit = {}
-    var isListLastPosition = MutableLiveData(false)
 
     private val scope = CoroutineScope(Dispatchers.Main + Job())
     private val ioThread = if (Alpaca.DEBUG) Dispatchers.Main else Dispatchers.IO
 
     lateinit var context: Context
-
-    fun updateItems(items: List<Memo>) {
-        memoRoomAdapter.updateList(items)
-    }
-
-    fun setOnItemClickListener(listener: (Memo) -> Unit) {
-        memoRoomAdapter.onItemClickListener = listener
-    }
-
-    fun setOnSelectModeChangedListener(listener: (Boolean) -> Unit) {
-        memoRoomAdapter.onSelectModeChangedListener = listener
-    }
 
     fun loadMemo(roomId: Int): LiveData<List<Memo>> {
         return AlpacaRepository.alpacaDao().getMemoList(roomId)
@@ -57,12 +41,6 @@ class MemoRoomFragmentViewModel : ViewModel() {
             }
         }
     }
-
-    fun setSelectMode(isOn: Boolean) = memoRoomAdapter.setSelectMode(isOn)
-
-    fun getSelectMode(): Boolean = memoRoomAdapter.getSelectMode()
-
-    fun getSelectItemList(): List<Memo> = memoRoomAdapter.getSelectItemList()
 
     fun getLayoutManager() : LinearLayoutManager {
         val lyManager = LinearLayoutManager(context)

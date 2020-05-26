@@ -17,49 +17,58 @@ class MemoRoomFragment() : Fragment() {
         val TAG = "MemoRoomFragment"
     }
 
-    private val vm: MemoRoomFragmentViewModel by viewModels()
+    interface MemoRoomFragmentCallback {
+        fun onClickAddMemo()
+        fun onClickPlus()
+    }
+
+    val memoRoomAdapter = MemoRoomAdapter()
+    private val viewModel: MemoRoomFragmentViewModel by viewModels()
     lateinit var bind: MemoRoomFragmentBind
     private var roomId: Int = -1
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         roomId = requireArguments().getInt("roomId", -1)
+
         // Setting ViewModel
-        vm.context = this.requireContext()
-        vm.loadMemo(roomId).observe(viewLifecycleOwner, Observer {
-            vm.updateItems(it)
+        viewModel.context = this.requireContext()
+        viewModel.loadMemo(roomId).observe(viewLifecycleOwner, Observer {
+            memoRoomAdapter.updateList(it)
             scrollToLastItem()
         })
-        vm.loadMemoRoom(roomId).observe(viewLifecycleOwner, Observer {
+        viewModel.loadMemoRoom(roomId).observe(viewLifecycleOwner, Observer {
             supportActionBar?.title = it?.title
         })
-        if (!vm.memoRoomAdapter.hasObservers()) {
-            vm.memoRoomAdapter.setHasStableIds(true) //Don't remove.
-        }
-        vm.plusClickListener = {
-            scrollToLastItem() //Temp
-        }
-        vm.writeClickListener = {
-            addMemo()
+        if (!memoRoomAdapter.hasObservers()) {
+            memoRoomAdapter.setHasStableIds(true) //Don't remove.
         }
 
         // Setting Bind
         bind = DataBindingUtil.inflate(inflater, R.layout.fragment_memoroom, container, false)
-        bind.lifecycleOwner = this
-        bind.vm = vm
-        setSupportActionBar(bind.toolbar)
+        bind.apply {
+            lifecycleOwner = viewLifecycleOwner
+            rvMemoList.adapter = memoRoomAdapter
+            vm = viewModel
+            callback = object : MemoRoomFragmentCallback {
+                override fun onClickAddMemo() {
+                    viewModel.addMemo(roomId)
+                }
 
-        // Setting BackButton to ActionBark
+                override fun onClickPlus() {
+                    scrollToLastItem()
+                }
+            }
+        }
+
+        // Setting ActionBar
+        setSupportActionBar(bind.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         return bind.root
     }
 
-    fun addMemo() {
-        vm.addMemo(roomId)
-    }
-
     fun scrollToLastItem() {
-        bind.rvMemoList.scrollToPosition(vm.memoRoomAdapter.itemCount - 1)
+        bind.rvMemoList.scrollToPosition(memoRoomAdapter.itemCount - 1)
         postScrollToLastItem()
     }
     // There is one issue that when itemview height is different, scrolling not working well.
@@ -67,7 +76,7 @@ class MemoRoomFragment() : Fragment() {
     fun postScrollToLastItem() {
         bind.rvMemoList.viewTreeObserver.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
-                bind.rvMemoList.scrollToPosition(vm.memoRoomAdapter.itemCount - 1)
+                bind.rvMemoList.scrollToPosition(memoRoomAdapter.itemCount - 1)
                 bind.rvMemoList.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
         })
