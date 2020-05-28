@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     >
     <data class="MemoRoomFragmentBind">
-        <variable name="vm" type="com.crash.alpaca.fragment.MemoRoomFragmentViewModel" />
+        <variable name="vm" type="com.crash.alpaca.viewmodel.MemoRoomFragmentViewModel" />
         <variable name="callback" type="com.crash.alpaca.fragment.MemoRoomFragment.MemoRoomFragmentCallback"/>
     </data>
 

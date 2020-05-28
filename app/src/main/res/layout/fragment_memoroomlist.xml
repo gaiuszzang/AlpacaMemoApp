@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     >
     <data class="MemoRoomListFragmentBind">
-        <variable name="vm" type="com.crash.alpaca.fragment.MemoRoomListFragmentViewModel" />
+        <variable name="vm" type="com.crash.alpaca.viewmodel.MemoRoomListFragmentViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -40,7 +40,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:bindRecyclerViewAdapter="@{vm.memoRoomListAdapter}"
             app:bindRecyclerViewAnimator="@{null}"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

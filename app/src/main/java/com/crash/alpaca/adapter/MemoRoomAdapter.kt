@@ -1,4 +1,4 @@
-package com.crash.alpaca.fragment
+package com.crash.alpaca.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -40,7 +40,7 @@ class MemoRoomAdapter : RecyclerView.Adapter<MemoRoomAdapter.MemoRoomViewHolder>
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MemoRoomAdapter.MemoRoomViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MemoRoomViewHolder {
         return MemoRoomViewHolder(
             DataBindingUtil.inflate(LayoutInflater.from(parent.context),
                 R.layout.layout_memoitem, parent, false))

@@ -1,66 +1,59 @@
 package com.crash.alpaca.fragment
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.crash.alpaca.Alpaca
 import com.crash.alpaca.R
-import com.crash.alpaca.data.MemoRoom
+import com.crash.alpaca.adapter.MemoRoomListAdapter
 import com.crash.alpaca.databinding.MemoRoomListFragmentBind
-import com.crash.alpaca.db.AlpacaRepository
 import com.crash.alpaca.setting.SettingFragment
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.crash.alpaca.viewmodel.MemoRoomListFragmentViewModel
+import kotlinx.coroutines.*
 
 class MemoRoomListFragment : Fragment() {
     companion object {
         private const val TAG = "MemoRoomListFragment"
     }
-
-    private val vm: MemoRoomListFragmentViewModel by viewModels()
-    lateinit var menu: Menu
-    lateinit var bind: MemoRoomListFragmentBind
-
     private val scope = CoroutineScope(Dispatchers.Main + Job())
     private val ioThread = if (Alpaca.DEBUG) Dispatchers.Main else Dispatchers.IO
+    private val viewModel: MemoRoomListFragmentViewModel by viewModels()
+    lateinit var menu: Menu
+    lateinit var bind: MemoRoomListFragmentBind
+    private val memoRoomListAdapter = MemoRoomListAdapter()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        vm.loadMemoRooms().observe(viewLifecycleOwner, Observer {
-            vm.updateItems(it)
-        })
-        vm.setOnItemClickListener {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        // Setting Adapter
+        if (!memoRoomListAdapter.hasObservers()) {
+            memoRoomListAdapter.setHasStableIds(true) //Don't remove.
+        }
+        memoRoomListAdapter.onItemClickListener = {
             val memoRoomFrag = MemoRoomFragment()
             val args = Bundle()
             args.putInt("roomId", it.id)
             memoRoomFrag.arguments = args
             setFragment(memoRoomFrag)
         }
-        vm.setOnSelectModeChangedListener {
+        memoRoomListAdapter.onSelectModeChangedListener = {
             updateActionBarMenu(it)
         }
-        if (!vm.memoRoomListAdapter.hasObservers()) {
-            vm.memoRoomListAdapter.setHasStableIds(true) //Don't remove.
-        }
 
+        // Setting ViewModel
+        viewModel.apply {
+            loadMemoRooms().observe(viewLifecycleOwner, Observer {
+                memoRoomListAdapter.updateList(it)
+            })
+        }
         bind = DataBindingUtil.inflate(inflater, R.layout.fragment_memoroomlist, container, false)
-        bind.lifecycleOwner = viewLifecycleOwner
-        bind.vm = vm
+        bind.apply {
+            lifecycleOwner = viewLifecycleOwner
+            rvMemoRoomList.adapter = memoRoomListAdapter
+            vm = viewModel
+        }
         setSupportActionBar(bind.toolbar)
 
         setHasOptionsMenu(true)
@@ -91,24 +84,22 @@ class MemoRoomListFragment : Fragment() {
         when (item.itemId) {
             R.id.menuAdd -> createNewMemoRoom()
             R.id.menuSetting -> setFragment(SettingFragment())
-            R.id.menuRemove -> {
-                scope.launch {
-                    withContext(ioThread) {
-                        removeMemoRoomSelected()
-                    }
-                    setSelectMode(false)
-                }
-            }
+            R.id.menuRemove -> removeMemoRoomSelected()
         }
         return super.onOptionsItemSelected(item)
     }
 
-    fun getSelectMode(): Boolean {
-        return vm.getSelectMode()
+    private fun getSelectMode(): Boolean {
+        return memoRoomListAdapter.getSelectMode()
     }
 
-    fun setSelectMode(isOn: Boolean) {
-        vm.setSelectMode(isOn)
+    private fun setSelectMode(isOn: Boolean) {
+        memoRoomListAdapter.setSelectMode(isOn)
+    }
+
+    private fun createNewMemoRoom() = scope.launch {
+        val newMemoRoomId = withContext(ioThread) { viewModel.createNewMemoRoom("New Memo Room", "This is new memo room") }
+        Toast.makeText(requireContext(), "Created MemoRoomId : $newMemoRoomId", Toast.LENGTH_SHORT).show()
     }
 
     private fun updateActionBarMenu(isSelectMode: Boolean) {
@@ -118,28 +109,13 @@ class MemoRoomListFragment : Fragment() {
         menu.findItem(R.id.menuRemove)?.isVisible = isSelectMode
     }
 
-    private fun createNewMemoRoom() {
-        scope.launch {
-            val memoRoomId = async(ioThread) {
-                return@async AlpacaRepository.alpacaDao().getMaxMemoRoomId() + 1
-            }.await()
-            val memoRoom = MemoRoom(
-                memoRoomId,
-                "New Room $memoRoomId",
-                "Description $memoRoomId",
-                MemoRoom.TYPE_NORMAL,
-                MemoRoom.VISIBILITY_SHOW
-            )
-            withContext(ioThread) {
-                AlpacaRepository.alpacaDao().insertMemoRoom(memoRoom)
+    private fun removeMemoRoomSelected() = scope.launch {
+        withContext(ioThread) {
+            memoRoomListAdapter.getSelectItemList().forEach {
+                viewModel.removeMemoRoom(it)
             }
         }
-    }
-
-    private fun removeMemoRoomSelected() {
-        vm.getSelectItemList().forEach {
-            AlpacaRepository.alpacaDao().deleteMemoRoom(it)
-        }
+        setSelectMode(false)
     }
 }
 

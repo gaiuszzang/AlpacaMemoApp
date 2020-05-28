@@ -1,6 +1,7 @@
 package com.crash.alpaca.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,10 +10,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.crash.alpaca.Alpaca
 import com.crash.alpaca.R
+import com.crash.alpaca.adapter.MemoRoomAdapter
 import com.crash.alpaca.databinding.MemoRoomFragmentBind
+import com.crash.alpaca.viewmodel.MemoRoomFragmentViewModel
+import kotlinx.coroutines.*
 
-class MemoRoomFragment() : Fragment() {
+class MemoRoomFragment : Fragment() {
     companion object {
         val TAG = "MemoRoomFragment"
     }
@@ -22,6 +27,8 @@ class MemoRoomFragment() : Fragment() {
         fun onClickPlus()
     }
 
+    private val scope = CoroutineScope(Dispatchers.Main + Job())
+    private val ioThread = if (Alpaca.DEBUG) Dispatchers.Main else Dispatchers.IO
     val memoRoomAdapter = MemoRoomAdapter()
     private val viewModel: MemoRoomFragmentViewModel by viewModels()
     lateinit var bind: MemoRoomFragmentBind
@@ -30,17 +37,22 @@ class MemoRoomFragment() : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         roomId = requireArguments().getInt("roomId", -1)
 
-        // Setting ViewModel
-        viewModel.context = this.requireContext()
-        viewModel.loadMemo(roomId).observe(viewLifecycleOwner, Observer {
-            memoRoomAdapter.updateList(it)
-            scrollToLastItem()
-        })
-        viewModel.loadMemoRoom(roomId).observe(viewLifecycleOwner, Observer {
-            supportActionBar?.title = it?.title
-        })
+        // Setting Adapter
         if (!memoRoomAdapter.hasObservers()) {
             memoRoomAdapter.setHasStableIds(true) //Don't remove.
+        }
+
+        // Setting ViewModel
+        viewModel.apply {
+            context = requireContext()
+            roomId = this@MemoRoomFragment.roomId
+            loadMemo().observe(viewLifecycleOwner, Observer {
+                memoRoomAdapter.updateList(it)
+                scrollToLastItem()
+            })
+            loadMemoRoom().observe(viewLifecycleOwner, Observer {
+                supportActionBar?.title = it?.title
+            })
         }
 
         // Setting Bind
@@ -51,9 +63,15 @@ class MemoRoomFragment() : Fragment() {
             vm = viewModel
             callback = object : MemoRoomFragmentCallback {
                 override fun onClickAddMemo() {
-                    viewModel.addMemo(roomId)
+                    scope.launch {
+                        val content = viewModel.userMsg.value!!
+                        withContext(ioThread) {
+                            viewModel.addMemo(content)
+                            Log.d(TAG, "added memo")
+                        }
+                        viewModel.userMsg.value = ""
+                    }
                 }
-
                 override fun onClickPlus() {
                     scrollToLastItem()
                 }
