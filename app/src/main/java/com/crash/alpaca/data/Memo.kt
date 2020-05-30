@@ -18,7 +18,7 @@ import androidx.room.ForeignKey
 )
 data class Memo(
     val id: String,
-    @ColumnInfo(name = "room_id")
+    @ColumnInfo(name = "room_id", index = true)
     val roomId: Int,
     val content: String,
     val time: Long
