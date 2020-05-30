@@ -7,7 +7,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -121,11 +120,22 @@ class MemoRoomListFragment : Fragment() {
         memoRoomListAdapter.setSelectMode(isOn)
     }
 
-    private fun createNewMemoRoom() = scope.launch {
-        val newMemoRoomId = withContext(ioThread) {
-            viewModel.createNewMemoRoom("New Memo Room", "This is new memo room")
-        }
-        Toast.makeText(requireContext(), "Created MemoRoomId : $newMemoRoomId", Toast.LENGTH_SHORT).show()
+    private fun createNewMemoRoom() {
+        CreateRoomDialogFragment().apply {
+            positiveButtonClickListener = {
+                scope.launch {
+                    val roomId = withContext(ioThread) {
+                        viewModel.createNewMemoRoom("New Memo Room", "This is new memo room")
+                    }
+                    setFragment(MemoRoomFragment().apply {
+                        arguments = Bundle().apply {
+                            putInt("roomId", roomId)
+                        }
+                    })
+                    dismiss()
+                }
+            }
+        }.show(parentFragmentManager)
     }
 
     private fun updateActionBarMenu(isSelectMode: Boolean) {

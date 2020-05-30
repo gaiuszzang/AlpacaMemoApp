@@ -23,4 +23,3 @@ class MemoRoomListFragmentViewModel : ViewModel() {
         AlpacaRepository.alpacaDao().deleteMemoRoom(memoRoom)
     }
 }
-
