@@ -1,7 +1,6 @@
 package com.crash.alpaca.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,12 +13,13 @@ import com.crash.alpaca.Alpaca
 import com.crash.alpaca.R
 import com.crash.alpaca.adapter.MemoRoomAdapter
 import com.crash.alpaca.databinding.MemoRoomFragmentBind
+import com.crash.alpaca.logd
 import com.crash.alpaca.viewmodel.MemoRoomFragmentViewModel
 import kotlinx.coroutines.*
 
 class MemoRoomFragment : Fragment() {
     companion object {
-        val TAG = "MemoRoomFragment"
+        private const val TAG = "MemoRoomFragment"
     }
 
     interface MemoRoomFragmentCallback {
@@ -66,8 +66,8 @@ class MemoRoomFragment : Fragment() {
                     scope.launch {
                         val content = viewModel.userMsg.value!!
                         withContext(ioThread) {
+                            logd(TAG, "added memo")
                             viewModel.addMemo(content)
-                            Log.d(TAG, "added memo")
                         }
                         viewModel.userMsg.value = ""
                     }

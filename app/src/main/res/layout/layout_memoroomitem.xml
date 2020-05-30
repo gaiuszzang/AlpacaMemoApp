@@ -14,50 +14,52 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:clickable="true"
-        android:foreground="?android:attr/selectableItemBackground"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/memoroom_item_height"
+        android:padding="@dimen/memorrom_item_padding"
+        android:foreground="?android:attr/selectableItemBackground"
         android:background="@{isSelected ? @color/colorSelect : @color/colorNoSelect}"
-        android:padding="10dp"
         android:onClick="@{itemClickListener}"
         app:bindLongClickListener="@{itemLongClickListener}"
         >
         <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/guideline"
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.5"
             />
-        <ImageView
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="end"
+            app:constraint_referenced_ids="memoRoomIcon"
+            />
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/memoRoomIcon"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_width="@dimen/memoroom_item_icon_width"
+            android:layout_height="@dimen/memoroom_item_icon_height"
+            android:src="@{isSelected ? @drawable/ic_memo_item_select : @drawable/ic_memo_item_default}"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             />
-        <ImageView
-            android:id="@+id/memoRoomCheck"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_checkmark_outline"
-            android:visibility="@{isSelected ? View.VISIBLE : View.GONE, default=gone}"
-            app:layout_constraintRight_toRightOf="@id/memoRoomIcon"
-            app:layout_constraintBottom_toBottomOf="@id/memoRoomIcon"
-            />
-        <TextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/memoRoomTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/memoroom_item_title_margin_start"
             android:text="@{memoRoom.title}"
-            app:layout_constraintLeft_toRightOf="@id/memoRoomIcon"
-            app:layout_constraintBottom_toTopOf="@id/guideline"/>
-        <TextView
+            app:layout_constraintStart_toEndOf="@id/barrier"
+            app:layout_constraintBottom_toTopOf="@id/guideline"
+            />
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/memoroom_item_description_margin_start"
             android:text="@{memoRoom.description}"
-            app:layout_constraintLeft_toRightOf="@id/memoRoomIcon"
+            app:layout_constraintStart_toEndOf="@id/barrier"
             app:layout_constraintTop_toBottomOf="@id/guideline"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>

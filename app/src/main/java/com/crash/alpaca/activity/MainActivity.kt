@@ -1,33 +1,35 @@
 package com.crash.alpaca.activity
 
 import android.content.res.Configuration
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import com.crash.alpaca.R
+import com.crash.alpaca.databinding.ActivityMainBinding
 import com.crash.alpaca.fragment.MemoRoomListFragment
+import com.crash.alpaca.logd
 
 class MainActivity : AppCompatActivity() {
     companion object {
-        val TAG = "AlpacaMemoActivity"
+        private const val TAG = "AlpacaMemoActivity"
     }
 
     var backPressCallback: (() -> Boolean)? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG, "onCreate : $savedInstanceState")
-        setContentView(R.layout.activity_main)
+        logd(TAG, "onCreate : $savedInstanceState")
+        DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.lyFrame, MemoRoomListFragment())
-                .commit()
+                    .replace(R.id.lyFrame, MemoRoomListFragment())
+                    .commit()
         }
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        Log.d(TAG, "onConfigurationChanged : $newConfig")
+        logd(TAG, "onConfigurationChanged : $newConfig")
     }
 
     override fun onBackPressed() {
