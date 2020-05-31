@@ -11,6 +11,7 @@ import com.crash.alpaca.databinding.MemoRoomItemLayoutBind
 class MemoRoomListAdapter : RecyclerView.Adapter<MemoRoomListAdapter.MemoRoomViewHolder>() {
     private val itemList = mutableListOf<MemoRoom>()
     private val itemSelected = mutableListOf<Boolean>()
+    private var itemSelectedCount = 0
     private var isSelectMode = false
 
     var onItemClickListener: (MemoRoom) -> Unit = {}
@@ -25,16 +26,16 @@ class MemoRoomListAdapter : RecyclerView.Adapter<MemoRoomListAdapter.MemoRoomVie
             bind.isSelected = isSelectMode && isSelected
             bind.setItemClickListener {
                 if (isSelectMode) {
-                    itemSelected[pos] = !itemSelected[pos]
-                    notifyItemChanged(pos)
+                    toggleItemSelected(pos)
+                    if (itemSelectedCount == 0) setSelectMode(false)
                 } else {
                     onItemClickListener.invoke(item)
                 }
             }
             bind.setItemLongClickListener {
                 if (!isSelectMode) {
-                    itemSelected[pos] = true
                     setSelectMode(true)
+                    toggleItemSelected(pos)
                 }
                 return@setItemLongClickListener true
             }
@@ -64,16 +65,14 @@ class MemoRoomListAdapter : RecyclerView.Adapter<MemoRoomListAdapter.MemoRoomVie
     fun updateList(list: List<MemoRoom>) {
         itemList.clear()
         itemList.addAll(list)
-        itemSelected.clear()
-        itemSelected.addAll(Array(list.size) { false })
+        clearItemSelected()
         notifyDataSetChanged()
     }
 
     fun setSelectMode(isOn: Boolean) {
         isSelectMode = isOn
         if (!isSelectMode) {
-            itemSelected.clear()
-            itemSelected.addAll(Array(itemList.size) { false })
+            clearItemSelected()
         }
         notifyDataSetChanged()
         onSelectModeChangedListener.invoke(isSelectMode)
@@ -82,4 +81,16 @@ class MemoRoomListAdapter : RecyclerView.Adapter<MemoRoomListAdapter.MemoRoomVie
     fun getSelectMode() = isSelectMode
 
     fun getSelectItemList() = itemList.filterIndexed { index, _ -> itemSelected[index] }
+
+    private fun clearItemSelected() {
+        itemSelected.clear()
+        itemSelected.addAll(Array(itemList.size) { false })
+        itemSelectedCount = 0
+    }
+
+    private fun toggleItemSelected(pos: Int) {
+        itemSelected[pos] = !itemSelected[pos]
+        itemSelectedCount = if (itemSelected[pos]) itemSelectedCount + 1 else itemSelectedCount - 1
+        notifyItemChanged(pos)
+    }
 }

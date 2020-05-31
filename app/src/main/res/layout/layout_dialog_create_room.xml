@@ -3,6 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
+    <data class="MemoRoomOptionDialogFragmentBind">
+        <variable name="vm" type="com.crash.alpaca.viewmodel.MemoRoomOptionDialogViewModel" />
+    </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -13,9 +16,22 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dialog_create_memo_room_input_margin_bottom"
             android:hint="@string/create_memo_room_title_hint"
+            android:text="@={vm.roomTitle}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/radio_group"
+            />
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/edittext_desc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dialog_create_memo_room_input_margin_bottom"
+            android:hint="@string/create_memo_room_desc_hint"
+            android:text="@={vm.roomDesc}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edittext_title"
             app:layout_constraintBottom_toTopOf="@id/radio_group"
             />
         <RadioGroup
@@ -24,7 +40,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/edittext_title"
+            app:layout_constraintTop_toBottomOf="@id/edittext_desc"
             >
             <androidx.appcompat.widget.AppCompatRadioButton
                 android:layout_width="match_parent"

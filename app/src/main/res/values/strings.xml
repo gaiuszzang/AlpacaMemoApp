@@ -6,6 +6,7 @@
 
     <string name="create_memo_room_title">Create memo room</string>
     <string name="create_memo_room_title_hint">Input memo room title</string>
+    <string name="create_memo_room_desc_hint">Input memo room desc</string>
     <string name="create_memo_room_type_normal">Normal memo room</string>
     <string name="create_memo_room_type_diary">Diary memo room</string>
     <string name="create_memo_room_hidden">Set to hide room</string>

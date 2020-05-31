@@ -35,11 +35,7 @@ class MemoRoomListFragment : Fragment() {
     private lateinit var menu: Menu
     private val memoRoomListAdapter = MemoRoomListAdapter().apply {
         onItemClickListener = {
-            setFragment(MemoRoomFragment().apply {
-                arguments = Bundle().apply {
-                    putInt("roomId", it.id)
-                }
-            })
+            showMemoRoom(it.id)
         }
         onSelectModeChangedListener = {
             updateActionBarMenu(it)
@@ -121,18 +117,13 @@ class MemoRoomListFragment : Fragment() {
     }
 
     private fun createNewMemoRoom() {
-        CreateRoomDialogFragment().apply {
-            positiveButtonClickListener = {
+        MemoRoomOptionDialogFragment().apply {
+            setResultCallback { title, desc ->
                 scope.launch {
                     val roomId = withContext(ioThread) {
-                        viewModel.createNewMemoRoom("New Memo Room", "This is new memo room")
+                        viewModel.createNewMemoRoom(title, desc)
                     }
-                    setFragment(MemoRoomFragment().apply {
-                        arguments = Bundle().apply {
-                            putInt("roomId", roomId)
-                        }
-                    })
-                    dismiss()
+                    showMemoRoom(roomId)
                 }
             }
         }.show(parentFragmentManager)
@@ -152,6 +143,14 @@ class MemoRoomListFragment : Fragment() {
             }
         }
         setSelectMode(false)
+    }
+
+    private fun showMemoRoom(roomId: Int) {
+        setFragment(MemoRoomFragment().apply {
+            arguments = Bundle().apply {
+                putInt("roomId", roomId)
+            }
+        })
     }
 }
 
