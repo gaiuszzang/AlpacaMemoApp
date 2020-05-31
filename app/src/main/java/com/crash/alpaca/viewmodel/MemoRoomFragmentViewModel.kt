@@ -25,7 +25,7 @@ class MemoRoomFragmentViewModel : ViewModel() {
     }
 
     fun addMemo(content: String) {
-        if (!content.equals("")) {
+        if (content.isNotEmpty()) {
             val msgId =  UUID.randomUUID().toString()
             val memo = Memo(msgId, roomId, content, System.currentTimeMillis())
             AlpacaRepository.alpacaDao().insertMemo(memo)
