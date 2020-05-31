@@ -16,7 +16,10 @@ class MemoRoomListAdapter : RecyclerView.Adapter<MemoRoomListAdapter.MemoRoomVie
     var onItemClickListener: (MemoRoom) -> Unit = {}
     var onSelectModeChangedListener: (Boolean) -> Unit = {}
 
-    inner class MemoRoomViewHolder(private val bind: MemoRoomItemLayoutBind) : RecyclerView.ViewHolder(bind.root) {
+    inner class MemoRoomViewHolder(
+            private val bind: MemoRoomItemLayoutBind
+    ) : RecyclerView.ViewHolder(bind.root) {
+
         fun bind(pos: Int, item: MemoRoom, isSelected: Boolean) {
             bind.memoRoom = item
             bind.isSelected = isSelectMode && isSelected
@@ -39,12 +42,11 @@ class MemoRoomListAdapter : RecyclerView.Adapter<MemoRoomListAdapter.MemoRoomVie
     }
 
     override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
+            parent: ViewGroup,
+            viewType: Int
     ): MemoRoomViewHolder {
 
-        return MemoRoomViewHolder(
-            DataBindingUtil.inflate(
+        return MemoRoomViewHolder(DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
             R.layout.layout_memoroomitem, parent, false))
     }
@@ -63,7 +65,7 @@ class MemoRoomListAdapter : RecyclerView.Adapter<MemoRoomListAdapter.MemoRoomVie
         itemList.clear()
         itemList.addAll(list)
         itemSelected.clear()
-        itemSelected.addAll(Array(list.size){false})
+        itemSelected.addAll(Array(list.size) { false })
         notifyDataSetChanged()
     }
 

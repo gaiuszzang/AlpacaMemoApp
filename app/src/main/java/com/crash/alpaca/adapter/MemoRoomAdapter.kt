@@ -61,7 +61,7 @@ class MemoRoomAdapter : RecyclerView.Adapter<MemoRoomAdapter.MemoRoomViewHolder>
         itemList.clear()
         itemList.addAll(list)
         itemSelected.clear()
-        itemSelected.addAll(Array(list.size){false})
+        itemSelected.addAll(Array(list.size){ false })
         notifyDataSetChanged()
     }
 

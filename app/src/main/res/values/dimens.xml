@@ -1,4 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="appbarlayout_height">150dp</dimen>
+
+    <dimen name="memoroom_item_height">76dp</dimen>
+    <dimen name="memorrom_item_padding">12dp</dimen>
+    <dimen name="memoroom_item_icon_width">40dp</dimen>
+    <dimen name="memoroom_item_icon_height">40dp</dimen>
+
+    <dimen name="memoroom_item_title_margin_start">16dp</dimen>
+    <dimen name="memoroom_item_description_margin_start">16dp</dimen>
+
+    <dimen name="dialog_content_margin_start">16dp</dimen>
+    <dimen name="dialog_content_margin_end">16dp</dimen>
+    <dimen name="dialog_content_margin_top">16dp</dimen>
+    <dimen name="dialog_content_margin_bottom">16dp</dimen>
+
+    <dimen name="dialog_create_memo_room_input_margin_bottom">32dp</dimen>
+    <dimen name="dialog_create_memo_room_radio_button_top">8dp</dimen>
+    <dimen name="dialog_create_memo_room_radio_button_bottom">8dp</dimen>
+    <dimen name="dialog_create_memo_room_checkbox_hidden_top">16dp</dimen>
 </resources>
