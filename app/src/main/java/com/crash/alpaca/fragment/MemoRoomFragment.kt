@@ -63,8 +63,11 @@ class MemoRoomFragment : Fragment() {
             vm = viewModel
             callback = object : MemoRoomFragmentCallback {
                 override fun onClickAddMemo() {
+                    val content = viewModel.userMsg.value
+                    if (content.isNullOrEmpty()) {
+                        return
+                    }
                     scope.launch {
-                        val content = viewModel.userMsg.value!!
                         withContext(ioThread) {
                             logd(TAG, "added memo")
                             viewModel.addMemo(content)
