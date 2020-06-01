@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/colorMemoTimestamp"
             android:textSize="10sp"
-            android:text="@{TextUtils.getMemoTimestamp(memo.time)}"
+            android:text="@{TextUtils.INSTANCE.getMemoTimestamp(memo.time)}"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:paddingTop="5dp"
