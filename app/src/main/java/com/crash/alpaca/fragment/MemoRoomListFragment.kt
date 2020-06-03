@@ -11,17 +11,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import com.crash.alpaca.Alpaca
 import com.crash.alpaca.R
 import com.crash.alpaca.adapter.MemoRoomListAdapter
 import com.crash.alpaca.databinding.MemoRoomListFragmentBind
 import com.crash.alpaca.setting.SettingFragment
 import com.crash.alpaca.viewmodel.MemoRoomListFragmentViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class MemoRoomListFragment : Fragment() {
 
@@ -29,8 +23,8 @@ class MemoRoomListFragment : Fragment() {
         private const val TAG = "MemoRoomListFragment"
     }
 
-    private val scope = CoroutineScope(Dispatchers.Main + Job())
-    private val ioThread = if (Alpaca.DEBUG) Dispatchers.Main else Dispatchers.IO
+    //private val scope = CoroutineScope(Dispatchers.Main + Job())
+    //private val ioThread = if (Alpaca.DEBUG) Dispatchers.Main else Dispatchers.IO
     private val viewModel: MemoRoomListFragmentViewModel by viewModels()
     private lateinit var menu: Menu
     private val memoRoomListAdapter = MemoRoomListAdapter().apply {
@@ -119,12 +113,7 @@ class MemoRoomListFragment : Fragment() {
     private fun createNewMemoRoom() {
         MemoRoomOptionDialogFragment().apply {
             setResultCallback { title, desc ->
-                scope.launch {
-                    val roomId = withContext(ioThread) {
-                        viewModel.createNewMemoRoom(title, desc)
-                    }
-                    showMemoRoom(roomId)
-                }
+                viewModel.createNewMemoRoom(title, desc) { showMemoRoom(it) }
             }
         }.show(parentFragmentManager)
     }
@@ -136,12 +125,8 @@ class MemoRoomListFragment : Fragment() {
         menu.findItem(R.id.menuRemove)?.isVisible = isSelectMode
     }
 
-    private fun removeMemoRoomSelected() = scope.launch {
-        withContext(ioThread) {
-            memoRoomListAdapter.getSelectItemList().forEach {
-                viewModel.removeMemoRoom(it)
-            }
-        }
+    private fun removeMemoRoomSelected() {
+        viewModel.removeMemoRoomList(memoRoomListAdapter.getSelectItemList())
         setSelectMode(false)
     }
 
