@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#FEFEE0</color>
+    <color name="colorPrimary">#FAFAFA</color>
     <color name="colorPrimaryDark">@color/colorPrimary</color>
-    <color name="colorAccent">#03DAC5</color>
+    <color name="colorAccent">#40C0B8</color>
 
     <color name="colorNoSelect">#0000</color>
     <color name="colorSelect">#10101010</color>
@@ -10,8 +10,8 @@
     <color name="colorNoWrite">#a0a0a0</color>
     <color name="colorWrite">#000000</color>
 
-    <color name="colorMemo">#00d0f0</color>
-    <color name="colorMemoClick">#00caea</color>
+    <color name="colorMemo">#a0c0c0</color>
+    <color name="colorMemoClick">#98b8b8</color>
     <color name="colorMemoText">#fafafa</color>
     <color name="colorMemoTimestamp">#808080</color>
 </resources>

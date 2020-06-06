@@ -5,12 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.crash.alpaca.R
 import com.crash.alpaca.adapter.MemoRoomAdapter
+import com.crash.alpaca.data.Memo
 import com.crash.alpaca.databinding.MemoRoomFragmentBind
 import com.crash.alpaca.viewmodel.MemoRoomFragmentViewModel
 
@@ -24,7 +26,11 @@ class MemoRoomFragment : Fragment() {
         fun onClickPlus()
     }
 
-    val memoRoomAdapter = MemoRoomAdapter()
+    val memoRoomAdapter = MemoRoomAdapter().apply {
+        onItemLongClickListener = {
+            showMemoOption(it)
+        }
+    }
     private val viewModel: MemoRoomFragmentViewModel by viewModels()
     lateinit var bind: MemoRoomFragmentBind
     private var roomId: Int = -1
@@ -70,6 +76,21 @@ class MemoRoomFragment : Fragment() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         return bind.root
+    }
+
+    fun showMemoOption(memo: Memo) {
+        MemoOptionDialogFragment().apply {
+            setMemo(memo)
+            setResultCallback { index ->
+                when(index) {
+                    0 -> {
+                        viewModel.copyMemoToClipboard(memo)
+                        Toast.makeText(requireContext(), "Copy to Clipboard", Toast.LENGTH_SHORT).show()
+                    }
+                    1 -> viewModel.removeMemo(memo)
+                }
+            }
+        }.show(parentFragmentManager)
     }
 
     fun scrollToLastItem() {

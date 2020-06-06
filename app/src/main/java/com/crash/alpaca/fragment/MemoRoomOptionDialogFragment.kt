@@ -27,7 +27,7 @@ class MemoRoomOptionDialogFragment : AlpacaDialogFragment() {
     ): View? {
         dialog?.setTitle(R.string.create_memo_room_title)
 
-        bind = DataBindingUtil.inflate(inflater, R.layout.layout_dialog_create_room, container, false)
+        bind = DataBindingUtil.inflate(inflater, R.layout.layout_dialog_memo_room_option, container, false)
         bind.vm = viewModel
 
         positiveButtonClickListener = listener@ {
@@ -40,7 +40,7 @@ class MemoRoomOptionDialogFragment : AlpacaDialogFragment() {
         }
 
         return super.onCreateView(inflater, container, savedInstanceState).apply {
-            setContentView(bind.root)
+            setContentView(bind.root, showNegBtn = true, showPosBtn = true)
         }
     }
 

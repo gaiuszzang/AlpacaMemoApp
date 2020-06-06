@@ -10,6 +10,11 @@
     <dimen name="memoroom_item_title_margin_start">16dp</dimen>
     <dimen name="memoroom_item_description_margin_start">16dp</dimen>
 
+    <dimen name="dialog_margin_side">10dp</dimen>
+    <dimen name="dialog_margin_top">60dp</dimen>
+    <dimen name="dialog_margin_bottom">30dp</dimen>
+    <dimen name="dialog_corner_radius">25dp</dimen>
+
     <dimen name="dialog_content_margin_start">16dp</dimen>
     <dimen name="dialog_content_margin_end">16dp</dimen>
     <dimen name="dialog_content_margin_top">16dp</dimen>

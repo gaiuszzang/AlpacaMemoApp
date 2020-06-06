@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    >
-    <solid
-        android:color="?android:colorBackground"
-        />
-    <corners
-        android:radius="24dp"
-        />
+<!-- refer from vendor/lge/frameworks/base/core/res/res/drawable/dialog_background_material.xml -->
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+android:insetLeft="@dimen/dialog_margin_side"
+android:insetRight="@dimen/dialog_margin_side"
+android:insetTop="@dimen/dialog_margin_top"
+android:insetBottom="@dimen/dialog_margin_bottom">
+<shape android:shape="rectangle">
+    <corners android:radius="@dimen/dialog_corner_radius" />
+    <solid android:color="?android:colorBackground" />
+    <stroke
+        android:width="0dp"
+        android:color="?android:colorBackground" />
 </shape>
+</inset>

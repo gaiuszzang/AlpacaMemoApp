@@ -14,6 +14,7 @@ class MemoRoomAdapter : RecyclerView.Adapter<MemoRoomAdapter.MemoRoomViewHolder>
     private var isSelectMode = false
 
     var onItemClickListener: (Memo) -> Unit = {}
+    var onItemLongClickListener: (Memo) -> Unit = {}
     var onSelectModeChangedListener: (Boolean) -> Unit = {}
 
     inner class MemoRoomViewHolder(private val bind: MemoItemLayoutBind) : RecyclerView.ViewHolder(bind.root) {
@@ -31,10 +32,9 @@ class MemoRoomAdapter : RecyclerView.Adapter<MemoRoomAdapter.MemoRoomViewHolder>
             }
             bind.setItemLongClickListener {
                 //TODO : UX is not fixed
-                /*if (!isSelectMode) {
-                    //itemSelected[pos] = true
-                    //setSelectMode(true)
-                }*/
+                if (!isSelectMode) {
+                    onItemLongClickListener.invoke(item);
+                }
                 return@setItemLongClickListener true
             }
         }
@@ -53,8 +53,7 @@ class MemoRoomAdapter : RecyclerView.Adapter<MemoRoomAdapter.MemoRoomViewHolder>
     }
 
     override fun getItemId(position: Int) : Long {
-        //return itemList[position].id.toLong() //TODO
-        return itemList[position].time;
+        return itemList[position].time; //TODO : Should be based on id
     }
 
     fun updateList(list: List<Memo>) {

@@ -23,8 +23,6 @@ class MemoRoomListFragment : Fragment() {
         private const val TAG = "MemoRoomListFragment"
     }
 
-    //private val scope = CoroutineScope(Dispatchers.Main + Job())
-    //private val ioThread = if (Alpaca.DEBUG) Dispatchers.Main else Dispatchers.IO
     private val viewModel: MemoRoomListFragmentViewModel by viewModels()
     private lateinit var menu: Menu
     private val memoRoomListAdapter = MemoRoomListAdapter().apply {

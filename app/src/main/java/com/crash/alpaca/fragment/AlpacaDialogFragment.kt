@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.MutableLiveData
 import com.crash.alpaca.R
 import com.crash.alpaca.databinding.LayoutAlpacaDialogBinding
 
@@ -15,6 +16,7 @@ abstract class AlpacaDialogFragment : DialogFragment() {
 
     private var content: ViewGroup? = null
 
+    lateinit var mBind: LayoutAlpacaDialogBinding
     var negativeButtonClickListener = { _: View -> dismiss() }
     var positiveButtonClickListener = { _: View -> dismiss() }
 
@@ -31,16 +33,19 @@ abstract class AlpacaDialogFragment : DialogFragment() {
         dialog?.window?.setGravity(Gravity.BOTTOM)
         dialog?.window?.setBackgroundDrawableResource(R.drawable.bg_dialog)
 
-        return DataBindingUtil.inflate<LayoutAlpacaDialogBinding>(
-                inflater, R.layout.layout_alpaca_dialog, container, false).apply {
+        mBind = DataBindingUtil.inflate<LayoutAlpacaDialogBinding>(
+            inflater, R.layout.layout_alpaca_dialog, container, false)
+        return mBind.apply {
             onNegativeClickListener = View.OnClickListener(negativeButtonClickListener)
             onPositiveClickListener = View.OnClickListener(positiveButtonClickListener)
             content = frame
         }.root
     }
 
-    fun setContentView(view: View) {
+    fun setContentView(view: View, showNegBtn: Boolean, showPosBtn: Boolean) {
         content?.addView(view)
+        mBind.showNegativeButton = showNegBtn;
+        mBind.showPositiveButton = showPosBtn;
     }
 
     abstract fun show(manager: FragmentManager)

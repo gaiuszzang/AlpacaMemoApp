@@ -10,4 +10,7 @@
     <string name="create_memo_room_type_normal">Normal memo room</string>
     <string name="create_memo_room_type_diary">Diary memo room</string>
     <string name="create_memo_room_hidden">Set to hide room</string>
+
+    <string name="menu_copy_to_clipboard">Copy to Clipboard</string>
+    <string name="menu_remove">Remove</string>
 </resources>

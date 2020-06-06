@@ -1,5 +1,7 @@
 package com.crash.alpaca.viewmodel
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -41,6 +43,20 @@ class MemoRoomFragmentViewModel : ViewModel() {
                 AlpacaRepository.alpacaDao().insertMemo(memo)
             }
             userMsg.value = ""
+        }
+    }
+
+    fun copyMemoToClipboard(memo: Memo) {
+        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip: ClipData = ClipData.newPlainText("AlpacaMemo", memo.content)
+        clipboard.setPrimaryClip(clip)
+    }
+
+    fun removeMemo(memo: Memo) {
+        viewModelScope.launch {
+            withContext(ioThread) {
+                AlpacaRepository.alpacaDao().deleteMemo(memo)
+            }
         }
     }
 
