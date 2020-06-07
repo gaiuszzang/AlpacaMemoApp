@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.crash.alpaca.data.Memo
 import com.crash.alpaca.data.MemoRoom
 
@@ -15,6 +16,9 @@ interface AlpacaDao {
 
     @Delete
     fun deleteMemoRoom(memoRoom: MemoRoom)
+
+    @Update
+    fun updateMemoRoom(memoRoom: MemoRoom)
 
     //@Query("DELETE FROM memoroom WHERE id = :id")
     //fun deleteMemoRoom(id: Int)

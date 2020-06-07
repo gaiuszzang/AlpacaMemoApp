@@ -37,6 +37,9 @@ object AlpacaRepository {
             liveDataMemoRoomList.value = memoRoomList
         }
 
+        override fun updateMemoRoom(memoRoom: MemoRoom) {
+            TODO("Not yet implemented")
+        }
         /*
         override fun deleteMemoRoom(id: Int) {
             memoRoomList.removeIf { it.id == id }
