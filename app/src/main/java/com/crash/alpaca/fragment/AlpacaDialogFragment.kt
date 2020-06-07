@@ -33,8 +33,9 @@ abstract class AlpacaDialogFragment : DialogFragment() {
     ): View? {
         dialog?.window?.setGravity(Gravity.BOTTOM)
         dialog?.window?.setBackgroundDrawableResource(R.drawable.bg_dialog)
-        dialog?.setTitle(titleResId)
-
+        if (titleResId != 0) {
+            dialog?.setTitle(titleResId)
+        }
         mBind = DataBindingUtil.inflate(
                 inflater, R.layout.layout_alpaca_dialog, container, false)
         return mBind.apply {
