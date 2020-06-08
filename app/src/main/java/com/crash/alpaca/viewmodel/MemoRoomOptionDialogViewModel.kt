@@ -1,9 +1,9 @@
 package com.crash.alpaca.viewmodel
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.crash.alpaca.db.AlpacaRepository
 
 class MemoRoomOptionDialogViewModel : ViewModel() {
-    var roomTitle = MutableLiveData("")
-    var roomDesc = MutableLiveData("")
+
+    fun loadMemoRoom(id: Int) = AlpacaRepository.alpacaDao().findMemoRoom(id)
 }

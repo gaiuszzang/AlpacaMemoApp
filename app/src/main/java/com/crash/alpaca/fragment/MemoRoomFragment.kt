@@ -2,6 +2,9 @@ package com.crash.alpaca.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
@@ -13,8 +16,14 @@ import androidx.lifecycle.Observer
 import com.crash.alpaca.R
 import com.crash.alpaca.adapter.MemoRoomAdapter
 import com.crash.alpaca.data.Memo
+import com.crash.alpaca.data.MemoRoom
 import com.crash.alpaca.databinding.MemoRoomFragmentBind
+import com.crash.alpaca.db.AlpacaRepository
 import com.crash.alpaca.viewmodel.MemoRoomFragmentViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MemoRoomFragment : Fragment() {
     companion object {
@@ -75,7 +84,38 @@ class MemoRoomFragment : Fragment() {
         setSupportActionBar(bind.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        setHasOptionsMenu(true)
         return bind.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.memo_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.meno_modify -> {
+                MemoRoomOptionDialogFragment().apply {
+                    titleResId = R.string.update_memo_room_title
+                    arguments = Bundle().apply {
+                        putInt(MemoRoomOptionDialogFragment.ARG_ROOM_ID, roomId)
+                    }
+                    setResultCallback { title, desc, type, hidden ->
+                        CoroutineScope(Dispatchers.IO).launch {
+                            AlpacaRepository.alpacaDao().updateMemoRoom(MemoRoom(roomId,
+                                    title, desc, type, hidden))
+                            withContext(Dispatchers.Main) {
+                                supportActionBar?.title = title
+                            }
+                        }
+                    }
+                }.show(parentFragmentManager)
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
+        }
     }
 
     fun showMemoOption(memo: Memo) {
@@ -97,6 +137,7 @@ class MemoRoomFragment : Fragment() {
         bind.rvMemoList.scrollToPosition(memoRoomAdapter.itemCount - 1)
         postScrollToLastItem()
     }
+
     // There is one issue that when itemview height is different, scrolling not working well.
     // so I add the postScroll Method
     private fun postScrollToLastItem() {

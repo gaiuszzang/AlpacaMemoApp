@@ -31,6 +31,10 @@ class MemoRoomFragmentViewModel : ViewModel() {
         return AlpacaRepository.alpacaDao().findMemoRoom(roomId)
     }
 
+    fun updateMemoRoom(memoRoom: MemoRoom) {
+        AlpacaRepository.alpacaDao().updateMemoRoom(memoRoom)
+    }
+
     fun addMemo() {
         viewModelScope.launch {
             val content = userMsg.value

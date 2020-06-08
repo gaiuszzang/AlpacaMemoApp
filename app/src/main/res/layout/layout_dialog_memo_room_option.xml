@@ -4,7 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
     <data class="MemoRoomOptionDialogFragmentBind">
+        <import type="com.crash.alpaca.data.MemoRoom" />
         <variable name="vm" type="com.crash.alpaca.viewmodel.MemoRoomOptionDialogViewModel" />
+        <variable name="title" type="String" />
+        <variable name="description" type="String" />
+        <variable name="typeNormal" type="boolean" />
+        <variable name="typeDiary" type="boolean" />
+        <variable name="hidden" type="boolean" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -20,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dialog_create_memo_room_input_margin_bottom"
             android:hint="@string/create_memo_room_title_hint"
-            android:text="@={vm.roomTitle}"
+            android:text="@={title}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -32,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dialog_create_memo_room_input_margin_bottom"
             android:hint="@string/create_memo_room_desc_hint"
-            android:text="@={vm.roomDesc}"
+            android:text="@={description}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/edittext_title"
@@ -52,6 +58,7 @@
                 android:layout_marginTop="@dimen/dialog_create_memo_room_radio_button_top"
                 android:layout_marginBottom="@dimen/dialog_create_memo_room_radio_button_bottom"
                 android:text="@string/create_memo_room_type_normal"
+                android:checked="@={typeNormal}"
                 />
             <androidx.appcompat.widget.AppCompatRadioButton
                 android:layout_width="match_parent"
@@ -59,6 +66,7 @@
                 android:layout_marginTop="@dimen/dialog_create_memo_room_radio_button_top"
                 android:layout_marginBottom="@dimen/dialog_create_memo_room_radio_button_bottom"
                 android:text="@string/create_memo_room_type_diary"
+                android:checked="@={typeDiary}"
                 />
         </RadioGroup>
         <androidx.appcompat.widget.AppCompatCheckBox
@@ -67,6 +75,7 @@
             android:layout_height="wrap_content"
             android:text="@string/create_memo_room_hidden"
             android:layout_marginTop="@dimen/dialog_create_memo_room_checkbox_hidden_top"
+            android:checked="@={hidden}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/radio_group"

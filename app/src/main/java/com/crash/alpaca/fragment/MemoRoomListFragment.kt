@@ -110,7 +110,8 @@ class MemoRoomListFragment : Fragment() {
 
     private fun createNewMemoRoom() {
         MemoRoomOptionDialogFragment().apply {
-            setResultCallback { title, desc ->
+            titleResId = R.string.create_memo_room_title
+            setResultCallback { title, desc, _, _ ->
                 viewModel.createNewMemoRoom(title, desc) { showMemoRoom(it) }
             }
         }.show(parentFragmentManager)
