@@ -12,6 +12,9 @@
     <string name="create_memo_room_hidden">Set to hide room</string>
 
     <string name="menu_copy_to_clipboard">Copy to Clipboard</string>
+    <string name="menu_add_alarm">Add Alarm</string>
+    <string name="menu_edit_alarm">Edit Alarm</string>
+    <string name="menu_del_alarm">Delete Alarm</string>
     <string name="menu_remove">Remove</string>
 
     <string name="menu_modify">Modify</string>

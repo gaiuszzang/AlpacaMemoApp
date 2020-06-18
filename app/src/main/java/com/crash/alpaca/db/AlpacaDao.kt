@@ -6,6 +6,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import com.crash.alpaca.data.Alarm
 import com.crash.alpaca.data.Memo
 import com.crash.alpaca.data.MemoRoom
 
@@ -43,4 +44,8 @@ interface AlpacaDao {
 
     @Query("SELECT * FROM memo WHERE room_id = :roomId ORDER BY time ASC")
     fun getMemoList(roomId: Int): LiveData<List<Memo>>
+
+    @Query("SELECT * FROM alarm WHERE memo_id = :memoId")
+    fun getAlarm(memoId: String): LiveData<Alarm>
+
 }

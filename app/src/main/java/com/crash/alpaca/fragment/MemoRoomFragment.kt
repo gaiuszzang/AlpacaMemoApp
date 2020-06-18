@@ -118,16 +118,19 @@ class MemoRoomFragment : Fragment() {
         }
     }
 
-    fun showMemoOption(memo: Memo) {
+    private fun showMemoOption(memo: Memo) {
         MemoOptionDialogFragment().apply {
             setMemo(memo)
             setResultCallback { index ->
                 when(index) {
                     0 -> {
                         viewModel.copyMemoToClipboard(memo)
-                        Toast.makeText(requireContext(), "Copy to Clipboard", Toast.LENGTH_SHORT).show()
+                        showToast("Copy to Clipboard")
                     }
-                    1 -> viewModel.removeMemo(memo)
+                    1 -> showToast("Add Alarm")
+                    2 -> showToast("Edit Alarm")
+                    3 -> showToast("Delete Alarm")
+                    4 -> viewModel.removeMemo(memo)
                 }
             }
         }.show(parentFragmentManager)

@@ -29,7 +29,7 @@ class MemoOptionDialogFragment : AlpacaDialogFragment() {
             savedInstanceState: Bundle?
     ): View? {
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        viewModel.memo.value = memo
+        viewModel.init(memo)
 
         bind = DataBindingUtil.inflate(inflater, R.layout.layout_dialog_memo_option, container, false)
         bind.vm = viewModel

@@ -1,5 +1,6 @@
 package com.crash.alpaca.fragment
 
+import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -39,4 +40,8 @@ fun Fragment.setFragment(
         }
         replace(R.id.lyFrame, fragment)
     }.commit()
+}
+
+fun Fragment.showToast(msg: String) {
+    Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
 }

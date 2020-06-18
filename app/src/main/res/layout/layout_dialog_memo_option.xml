@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
     <data class="MemoOptionDialogFragmentBind">
+        <import type="android.view.View" />
         <variable name="vm" type="com.crash.alpaca.viewmodel.MemoOptionDialogViewModel" />
         <variable name="v" type="com.crash.alpaca.fragment.MemoOptionDialogFragment"/>
     </data>
@@ -21,10 +22,34 @@
             tools:ignore="MissingConstraints"/>
         <androidx.appcompat.widget.AppCompatTextView
             style="@style/DialogTextItemStyle"
+            android:id="@+id/text_add_alarm"
+            android:text="@string/menu_add_alarm"
+            android:onClick="@{__ -> v.itemClick(1)}"
+            android:visibility="@{vm.alarm == null ? View.VISIBLE : View.GONE}"
+            app:layout_constraintTop_toBottomOf="@id/text_copy"
+            tools:ignore="MissingConstraints" />
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/DialogTextItemStyle"
+            android:id="@+id/text_edit_alarm"
+            android:text="@string/menu_edit_alarm"
+            android:onClick="@{__ -> v.itemClick(2)}"
+            android:visibility="@{vm.alarm != null ? View.VISIBLE : View.GONE}"
+            app:layout_constraintTop_toBottomOf="@id/text_add_alarm"
+            tools:ignore="MissingConstraints" />
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/DialogTextItemStyle"
+            android:id="@+id/text_del_alarm"
+            android:text="@string/menu_del_alarm"
+            android:onClick="@{__ -> v.itemClick(3)}"
+            android:visibility="@{vm.alarm != null ? View.VISIBLE : View.GONE}"
+            app:layout_constraintTop_toBottomOf="@id/text_edit_alarm"
+            tools:ignore="MissingConstraints" />
+        <androidx.appcompat.widget.AppCompatTextView
+            style="@style/DialogTextItemStyle"
             android:id="@+id/text_remove"
             android:text="@string/menu_remove"
-            android:onClick="@{__ -> v.itemClick(1)}"
-            app:layout_constraintTop_toBottomOf="@id/text_copy"
+            android:onClick="@{__ -> v.itemClick(4)}"
+            app:layout_constraintTop_toBottomOf="@id/text_del_alarm"
             tools:ignore="MissingConstraints" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

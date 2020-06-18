@@ -10,7 +10,8 @@ import com.crash.alpaca.data.MemoRoom
 //TODO: Study how to make testable code
 object AlpacaRepository {
 
-    var debugDao = if (Alpaca.DEBUG) (object: AlpacaDao {
+    /*
+    var debugDao = (object: AlpacaDao {
         val memoRoomList : ArrayList<MemoRoom> = arrayListOf(
             MemoRoom(0, "Test Room 0", "This is Description of Room 0"),
             MemoRoom(1, "Test Room 1", "This is Description of Room 1"),
@@ -83,14 +84,10 @@ object AlpacaRepository {
             //Test Code don't have roomId
             return liveDataMemoList
         }
-    }) else null
+    })*/
 
     @WorkerThread
     fun alpacaDao(): AlpacaDao {
-        return if (!Alpaca.DEBUG) {
-            Alpaca.instance.db.alpacaDao()
-        } else {
-            debugDao
-        }
+        return Alpaca.instance.db.alpacaDao()
     }
 }
