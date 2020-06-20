@@ -3,10 +3,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
-    <data class="MemoOptionDialogFragmentBind">
+    <data class="MemoDialogFragmentBind">
         <import type="android.view.View" />
-        <variable name="vm" type="com.crash.alpaca.viewmodel.MemoOptionDialogViewModel" />
-        <variable name="v" type="com.crash.alpaca.fragment.MemoOptionDialogFragment"/>
+        <variable name="vm" type="com.crash.alpaca.viewmodel.MemoDialogViewModel" />
+        <variable name="v" type="com.crash.alpaca.dialog.MemoDialogFragment"/>
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

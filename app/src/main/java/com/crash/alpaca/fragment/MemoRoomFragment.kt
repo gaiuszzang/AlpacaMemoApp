@@ -1,6 +1,7 @@
 package com.crash.alpaca.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -8,7 +9,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -19,6 +19,8 @@ import com.crash.alpaca.data.Memo
 import com.crash.alpaca.data.MemoRoom
 import com.crash.alpaca.databinding.MemoRoomFragmentBind
 import com.crash.alpaca.db.AlpacaRepository
+import com.crash.alpaca.dialog.MemoDialogFragment
+import com.crash.alpaca.dialog.MemoRoomDialogFragment
 import com.crash.alpaca.viewmodel.MemoRoomFragmentViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -37,7 +39,7 @@ class MemoRoomFragment : Fragment() {
 
     val memoRoomAdapter = MemoRoomAdapter().apply {
         onItemLongClickListener = {
-            showMemoOption(it)
+            showMemoDialog(it)
         }
     }
     private val viewModel: MemoRoomFragmentViewModel by viewModels()
@@ -54,7 +56,6 @@ class MemoRoomFragment : Fragment() {
 
         // Setting ViewModel
         viewModel.apply {
-            context = requireContext()
             roomId = this@MemoRoomFragment.roomId
             loadMemo().observe(viewLifecycleOwner, Observer {
                 memoRoomAdapter.updateList(it)
@@ -95,19 +96,9 @@ class MemoRoomFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.meno_modify -> {
-                MemoRoomOptionDialogFragment().apply {
-                    titleResId = R.string.update_memo_room_title
+                MemoRoomDialogFragment().apply {
                     arguments = Bundle().apply {
-                        putInt(MemoRoomOptionDialogFragment.ARG_ROOM_ID, roomId)
-                    }
-                    setResultCallback { title, desc, type, hidden ->
-                        CoroutineScope(Dispatchers.IO).launch {
-                            AlpacaRepository.alpacaDao().updateMemoRoom(MemoRoom(roomId,
-                                    title, desc, type, hidden))
-                            withContext(Dispatchers.Main) {
-                                supportActionBar?.title = title
-                            }
-                        }
+                        putInt(MemoRoomDialogFragment.ARG_ROOM_ID, roomId)
                     }
                 }.show(parentFragmentManager)
                 true
@@ -118,21 +109,9 @@ class MemoRoomFragment : Fragment() {
         }
     }
 
-    private fun showMemoOption(memo: Memo) {
-        MemoOptionDialogFragment().apply {
-            setMemo(memo)
-            setResultCallback { index ->
-                when(index) {
-                    0 -> {
-                        viewModel.copyMemoToClipboard(memo)
-                        showToast("Copy to Clipboard")
-                    }
-                    1 -> showToast("Add Alarm")
-                    2 -> showToast("Edit Alarm")
-                    3 -> showToast("Delete Alarm")
-                    4 -> viewModel.removeMemo(memo)
-                }
-            }
+    private fun showMemoDialog(memo: Memo) {
+        MemoDialogFragment().apply MemoDialogFragment@ {
+            this@MemoDialogFragment.memo = memo
         }.show(parentFragmentManager)
     }
 

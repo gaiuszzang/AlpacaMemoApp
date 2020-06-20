@@ -16,11 +16,9 @@ import kotlinx.coroutines.*
 import java.util.*
 
 class MemoRoomFragmentViewModel : ViewModel() {
-    private val ioThread = if (Alpaca.DEBUG) Dispatchers.Main else Dispatchers.IO
 
     var userMsg = MutableLiveData<String>()
-
-    lateinit var context: Context
+    val context = Alpaca.instance.context
     var roomId: Int = -1
 
     fun loadMemo(): LiveData<List<Memo>> {
@@ -31,36 +29,18 @@ class MemoRoomFragmentViewModel : ViewModel() {
         return AlpacaRepository.alpacaDao().findMemoRoom(roomId)
     }
 
-    fun updateMemoRoom(memoRoom: MemoRoom) {
-        AlpacaRepository.alpacaDao().updateMemoRoom(memoRoom)
-    }
-
     fun addMemo() {
         viewModelScope.launch {
             val content = userMsg.value
             if (content.isNullOrEmpty()) {
                 return@launch
             }
-            withContext(ioThread) {
+            withContext(Dispatchers.IO) {
                 val msgId =  UUID.randomUUID().toString()
                 val memo = Memo(msgId, roomId, content, System.currentTimeMillis())
                 AlpacaRepository.alpacaDao().insertMemo(memo)
             }
             userMsg.value = ""
-        }
-    }
-
-    fun copyMemoToClipboard(memo: Memo) {
-        val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clip: ClipData = ClipData.newPlainText("AlpacaMemo", memo.content)
-        clipboard.setPrimaryClip(clip)
-    }
-
-    fun removeMemo(memo: Memo) {
-        viewModelScope.launch {
-            withContext(ioThread) {
-                AlpacaRepository.alpacaDao().deleteMemo(memo)
-            }
         }
     }
 
