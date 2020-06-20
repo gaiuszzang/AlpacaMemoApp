@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.crash.alpaca.R
 import com.crash.alpaca.databinding.ActivityMainBinding
-import com.crash.alpaca.fragment.MemoRoomListFragment
+import com.crash.alpaca.fragment.MainFragment
 import com.crash.alpaca.logd
 
 class MainActivity : AppCompatActivity() {
@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.lyFrame, MemoRoomListFragment())
+                    .replace(R.id.lyFrame, MainFragment())
                     .commit()
         }
     }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <data class="AlarmDialogFragmentBind">
+        <import type="android.view.View" />
+        <variable name="vm" type="com.crash.alpaca.viewmodel.AlarmDialogViewModel" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="@dimen/dialog_content_margin_top"
+        android:paddingBottom="@dimen/dialog_content_margin_bottom">
+        <androidx.appcompat.widget.AppCompatEditText
+            style="@style/DialogTextItemStyle"
+            android:id="@+id/text_time"
+            android:text="@={vm.timeString}"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

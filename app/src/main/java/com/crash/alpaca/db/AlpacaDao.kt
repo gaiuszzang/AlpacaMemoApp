@@ -45,7 +45,21 @@ interface AlpacaDao {
     @Query("SELECT * FROM memo WHERE room_id = :roomId ORDER BY time ASC")
     fun getMemoList(roomId: Int): LiveData<List<Memo>>
 
-    @Query("SELECT * FROM alarm WHERE memo_id = :memoId")
-    fun getAlarm(memoId: String): LiveData<Alarm>
+    @Insert
+    fun insertAlarm(alarm: Alarm)
 
+    @Delete
+    fun deleteAlarm(alarm: Alarm)
+
+    @Update
+    fun updateAlarm(alarm: Alarm)
+
+    @Query("SELECT MAX(id) FROM alarm")
+    fun getMaxAlarmId(): Int
+
+    @Query("SELECT * FROM alarm WHERE id = :alarmId")
+    fun getAlarmById(alarmId: Int): LiveData<Alarm>
+
+    @Query("SELECT * FROM alarm WHERE memo_id = :memoId")
+    fun getAlarmByMemoId(memoId: String): LiveData<Alarm>
 }

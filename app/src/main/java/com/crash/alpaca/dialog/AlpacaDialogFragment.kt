@@ -1,4 +1,4 @@
-package com.crash.alpaca.fragment
+package com.crash.alpaca.dialog
 
 import android.os.Bundle
 import android.view.Gravity
@@ -10,12 +10,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.crash.alpaca.R
-import com.crash.alpaca.databinding.LayoutAlpacaDialogBinding
+import com.crash.alpaca.databinding.DialogFragmentBind
 
 abstract class AlpacaDialogFragment : DialogFragment() {
 
     private var content: ViewGroup? = null
-    private lateinit var mBind: LayoutAlpacaDialogBinding
+    private lateinit var mBind: DialogFragmentBind
     var negativeButtonClickListener = { _: View -> dismiss() }
     var positiveButtonClickListener = { _: View -> dismiss() }
     @StringRes
@@ -37,11 +37,12 @@ abstract class AlpacaDialogFragment : DialogFragment() {
             dialog?.setTitle(titleResId)
         }
         mBind = DataBindingUtil.inflate(
-                inflater, R.layout.layout_alpaca_dialog, container, false)
+                inflater, R.layout.dialog, container, false)
         return mBind.apply {
             onNegativeClickListener = View.OnClickListener(negativeButtonClickListener)
             onPositiveClickListener = View.OnClickListener(positiveButtonClickListener)
             content = frame
+            lifecycleOwner = this@AlpacaDialogFragment
         }.root
     }
 
