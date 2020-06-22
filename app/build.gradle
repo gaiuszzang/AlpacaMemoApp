@@ -40,6 +40,7 @@ android {
             signingConfig signingConfigs.releasekey
         }
     }
+
     buildFeatures {
         dataBinding = true
     }
@@ -51,6 +52,18 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+
+    applicationVariants.all { variant ->
+        def apkname
+        if (variant.name == 'release') {
+            apkname = "${rootProject.name}_v${versionName}_release.apk"
+        } else if (variant.name == 'debug') {
+            apkname = "${rootProject.name}_v${versionName}_debug.apk"
+        }
+        variant.outputs.all {
+            outputFileName = apkname
+        }
     }
 }
 
