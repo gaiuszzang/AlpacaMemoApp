@@ -6,7 +6,6 @@
 
     <string name="create_memo_room_title">Create memo room</string>
     <string name="create_memo_room_title_hint">Please enter the MemoRoom Title</string>
-    <string name="create_memo_room_desc_hint">Please enter the Description of MemoRoom</string>
     <string name="create_memo_room_type_normal">Normal memo room</string>
     <string name="create_memo_room_type_diary">Diary memo room</string>
     <string name="create_memo_room_hidden">Set to hide room</string>

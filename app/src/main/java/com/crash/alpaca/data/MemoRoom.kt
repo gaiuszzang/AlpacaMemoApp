@@ -10,7 +10,6 @@ import androidx.room.Entity
  * CREATE TABLE memoroom (
  *     id INTEGER PRIMARY KEY,
  *     title TEXT NOT NULL,
- *     desc TEXT,
  *     roomtype INTEGER DEFAULT 0
  *     hidden INTEGER DEFAULT 0
  *     password TEXT
@@ -20,8 +19,6 @@ import androidx.room.Entity
 data class MemoRoom(
     val id: Int,
     val title: String,
-    @ColumnInfo(name = "desc")
-    val description: String?,
     @ColumnInfo(name = "roomtype")
     @RoomType
     val roomType: Int = TYPE_NORMAL,
