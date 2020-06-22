@@ -6,7 +6,7 @@ apply plugin: 'kotlin-kapt'
 android {
     signingConfigs {
         releasekey {
-            storeFile file('D:\\Documents\\Codes\\Android\\AlpacaMemo\\alpaca-keystore.jks')
+            storeFile file('alpaca-keystore.jks')
             storePassword 'dkfvkzk1234!'
             keyAlias 'alpaca'
             keyPassword 'dkfvkzk1234!'
