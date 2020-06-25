@@ -21,7 +21,6 @@ class MemoDialogFragment : AlpacaDialogFragment() {
     }
     private val viewModel: MemoDialogViewModel by viewModels()
     private lateinit var bind: MemoDialogFragmentBind
-
     lateinit var memo: Memo
 
     override fun onCreateView(
@@ -30,7 +29,7 @@ class MemoDialogFragment : AlpacaDialogFragment() {
             savedInstanceState: Bundle?
     ): View? {
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        viewModel.init(this, memo)
+        viewModel.init(memo)
 
         bind = DataBindingUtil.inflate(inflater, R.layout.dialog_memo, container, false)
         bind.vm = viewModel

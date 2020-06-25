@@ -14,14 +14,13 @@ import kotlinx.coroutines.withContext
 
 class MemoDialogViewModel : ViewModel() {
     var memo = MutableLiveData<Memo>()
-    var alarm = MutableLiveData<Alarm>()
+    lateinit var alarm: LiveData<Alarm>
+
     val context = Alpaca.instance.context
 
-    fun init(owner: LifecycleOwner, m: Memo) {
+    fun init(m: Memo) {
         memo.value = m
-        AlpacaRepository.alpacaDao().getAlarmByMemoId(m.id).observe(owner, Observer {
-            alarm.value = it
-        })
+        alarm = AlpacaRepository.alpacaDao().getAlarmByMemoId(m.id)
     }
 
     fun copyMemoToClipboard() {

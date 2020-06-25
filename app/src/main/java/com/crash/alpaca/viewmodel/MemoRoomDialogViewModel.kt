@@ -14,15 +14,27 @@ class MemoRoomDialogViewModel : ViewModel() {
     var typeDiary = MutableLiveData<Boolean>(false)
     var isHidden    = MutableLiveData<Boolean>(false)
 
-    fun loadMemoRoom(owner: LifecycleOwner, id: Int) {
-        AlpacaRepository.alpacaDao().findMemoRoom(id).observe(owner, Observer {
+    var memoRoomObserver = Observer<MemoRoom?> {
+        memoRoomId.value = it?.id
+        title.value = it?.title
+        typeNormal.value = (it?.roomType == MemoRoom.TYPE_NORMAL)
+        typeDiary.value = (it?.roomType == MemoRoom.TYPE_DIARY)
+        isHidden.value = (it?.hidden == MemoRoom.VISIBILITY_HIDDEN)
+    }
+
+    fun loadMemoRoom(id: Int) {
+        val memoRoom = AlpacaRepository.alpacaDao().findMemoRoom(id)
+        var memoRoomObserver = Observer<MemoRoom?> {
             memoRoomId.value = it?.id
             title.value = it?.title
             typeNormal.value = (it?.roomType == MemoRoom.TYPE_NORMAL)
             typeDiary.value = (it?.roomType == MemoRoom.TYPE_DIARY)
             isHidden.value = (it?.hidden == MemoRoom.VISIBILITY_HIDDEN)
-        })
+            memoRoom.removeObserver(memoRoomObserver)
+        }
+        memoRoom.observeForever(memoRoomObserver)
     }
+
 
     fun saveMemoRoom(callback: (MemoRoom?, String?) -> (Unit)) {
         viewModelScope.launch {

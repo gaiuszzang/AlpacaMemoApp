@@ -38,7 +38,7 @@ class MemoRoomDialogFragment : AlpacaDialogFragment() {
         titleResId = R.string.create_memo_room_title
         arguments?.getInt(ARG_ROOM_ID, UNKNOWN_ID)?.let { roomId ->
             if (roomId != UNKNOWN_ID) {
-                viewModel.loadMemoRoom(this, roomId)
+                viewModel.loadMemoRoom(roomId)
                 titleResId = R.string.update_memo_room_title
             }
         }

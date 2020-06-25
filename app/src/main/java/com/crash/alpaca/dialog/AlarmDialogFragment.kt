@@ -34,7 +34,7 @@ class AlarmDialogFragment : AlpacaDialogFragment() {
             savedInstanceState: Bundle?
     ): View? {
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        viewModel.init(this, memo, alarm)
+        viewModel.init(memo, alarm)
 
         bind = DataBindingUtil.inflate(inflater, R.layout.dialog_alarm, container, false)
         bind.vm = viewModel

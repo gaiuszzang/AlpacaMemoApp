@@ -13,17 +13,10 @@ class AlarmDialogViewModel : ViewModel() {
     var memo = MutableLiveData<Memo>()
     var alarm = MutableLiveData<Alarm>()
 
-    fun init(owner: LifecycleOwner, memo: Memo, alarm: Alarm?) {
+    fun init(memo: Memo, alarm: Alarm?) {
         this.memo.value = memo
         this.alarm.value = alarm
-
-        if (this.alarm.value != null) {
-            AlpacaRepository.alpacaDao().getAlarmById(this.alarm.value!!.id).observe(owner, Observer {
-                timeString.value = it.alarmTime.toString()
-            })
-        } else {
-            timeString.value = System.currentTimeMillis().toString()
-        }
+        timeString.value = alarm?.alarmTime?.toString() ?: System.currentTimeMillis().toString()
     }
 
     fun saveAlarm(callback: (Alarm?, String?) -> (Unit)) {
