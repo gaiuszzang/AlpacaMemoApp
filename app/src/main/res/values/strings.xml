@@ -10,6 +10,10 @@
     <string name="create_memo_room_type_diary">Diary memo room</string>
     <string name="create_memo_room_hidden">Set to hide room</string>
 
+    <string name="menu_add_memoroom">Add memo room</string>
+    <string name="menu_setting">Setting</string>
+    <string name="menu_remove_memoroom">Remove memo room</string>
+
     <string name="menu_copy_to_clipboard">Copy to Clipboard</string>
     <string name="menu_add_alarm">Add Alarm</string>
     <string name="menu_edit_alarm">Edit Alarm</string>
