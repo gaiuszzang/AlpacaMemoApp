@@ -18,11 +18,11 @@ interface AlpacaDao {
     @Delete
     fun deleteMemoRoom(memoRoom: MemoRoom)
 
+    @Delete
+    fun deleteMemoRoom(memoRoom: List<MemoRoom>)
+
     @Update
     fun updateMemoRoom(memoRoom: MemoRoom)
-
-    //@Query("DELETE FROM memoroom WHERE id = :id")
-    //fun deleteMemoRoom(id: Int)
 
     @Query("SELECT * FROM memoroom WHERE id = :id")
     fun findMemoRoom(id: Int): LiveData<MemoRoom?>

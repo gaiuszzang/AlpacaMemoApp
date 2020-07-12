@@ -12,26 +12,21 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.crash.alpaca.R
-import com.crash.alpaca.adapter.MemoRoomListAdapter
+import com.crash.alpaca.adapter.MainAdapter
 import com.crash.alpaca.databinding.MainFragmentBind
 import com.crash.alpaca.dialog.MemoRoomDialogFragment
 import com.crash.alpaca.fragment.setting.SettingFragment
-import com.crash.alpaca.viewmodel.MainFragmentViewModel
+import com.crash.alpaca.viewmodel.MainViewModel
 
 class MainFragment : Fragment() {
 
-    companion object {
-        private const val TAG = "MemoRoomListFragment"
-    }
-
-    private val viewModel: MainFragmentViewModel by viewModels()
-    private lateinit var menu: Menu
-    private val memoRoomListAdapter = MemoRoomListAdapter().apply {
+    private val viewModel: MainViewModel by viewModels()
+    private val memoRoomListAdapter = MainAdapter().apply {
         onItemClickListener = {
-            showMemoRoom(it.id)
+            viewModel.onClickMemoRoom(it)
         }
-        onSelectModeChangedListener = {
-            updateActionBarMenu(it)
+        onItemLongClickListener = {
+            viewModel.onLongClickMemoRoom(it)
         }
     }
 
@@ -48,26 +43,29 @@ class MainFragment : Fragment() {
         viewModel.loadMemoRooms().observe(viewLifecycleOwner, Observer {
             memoRoomListAdapter.updateList(it)
         })
+        viewModel.selectedRooms.observe(viewLifecycleOwner, Observer {
+            memoRoomListAdapter.updateSelections(it)
+        })
+        viewModel.showMemoEvent.observe(viewLifecycleOwner, Observer {
+            showMemoRoom(it)
+        })
 
         setHasOptionsMenu(true)
 
-        setBackKeyPressCallback {
-            if (getSelectMode()) {
-                setSelectMode(false)
-                true
-            } else {
-                false
-            }
-        }
-
-        val bind = DataBindingUtil.inflate<MainFragmentBind>(
+        return DataBindingUtil.inflate<MainFragmentBind>(
                 inflater, R.layout.fragment_main, container, false).apply {
             setSupportActionBar(toolbar)
             lifecycleOwner = viewLifecycleOwner
             rvMemoRoomList.adapter = memoRoomListAdapter
             vm = viewModel
+        }.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setBackKeyPressCallback {
+            viewModel.onBackPress()
         }
-        return bind.root
     }
 
     override fun onPause() {
@@ -76,9 +74,14 @@ class MainFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        this.menu = menu
         inflater.inflate(R.menu.memoroomlist_menu, menu)
-        updateActionBarMenu(false)
+
+        viewModel.selectMode.observe(viewLifecycleOwner, Observer {
+            supportActionBar?.setDisplayHomeAsUpEnabled(it)
+            menu.findItem(R.id.menuAdd)?.isVisible = !it
+            menu.findItem(R.id.menuSetting)?.isVisible = !it
+            menu.findItem(R.id.menuRemove)?.isVisible = it
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -92,7 +95,7 @@ class MainFragment : Fragment() {
                 true
             }
             R.id.menuRemove -> {
-                removeMemoRoomSelected()
+                viewModel.removeMemoRooms()
                 true
             }
             else -> {
@@ -101,32 +104,12 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun getSelectMode(): Boolean {
-        return memoRoomListAdapter.getSelectMode()
-    }
-
-    private fun setSelectMode(isOn: Boolean) {
-        memoRoomListAdapter.setSelectMode(isOn)
-    }
-
     private fun createNewMemoRoom() {
         MemoRoomDialogFragment().apply {
             resultCallback = { memoRoom ->
                 showMemoRoom(memoRoom.id)
             }
         }.show(parentFragmentManager)
-    }
-
-    private fun updateActionBarMenu(isSelectMode: Boolean) {
-        supportActionBar?.setDisplayHomeAsUpEnabled(isSelectMode)
-        menu.findItem(R.id.menuAdd)?.isVisible = !isSelectMode
-        menu.findItem(R.id.menuSetting)?.isVisible = !isSelectMode
-        menu.findItem(R.id.menuRemove)?.isVisible = isSelectMode
-    }
-
-    private fun removeMemoRoomSelected() {
-        viewModel.removeMemoRoomList(memoRoomListAdapter.getSelectItemList())
-        setSelectMode(false)
     }
 
     private fun showMemoRoom(roomId: Int) {

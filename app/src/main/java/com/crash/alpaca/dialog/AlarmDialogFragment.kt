@@ -1,7 +1,6 @@
 package com.crash.alpaca.dialog
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,10 +12,8 @@ import com.crash.alpaca.R
 import com.crash.alpaca.data.Alarm
 import com.crash.alpaca.data.Memo
 import com.crash.alpaca.databinding.AlarmDialogFragmentBind
-import com.crash.alpaca.databinding.MemoDialogFragmentBind
 import com.crash.alpaca.fragment.showToast
 import com.crash.alpaca.viewmodel.AlarmDialogViewModel
-import com.crash.alpaca.viewmodel.MemoDialogViewModel
 
 class AlarmDialogFragment : AlpacaDialogFragment() {
     companion object {
