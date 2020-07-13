@@ -1,7 +1,6 @@
 package com.crash.alpaca.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -16,21 +15,12 @@ import androidx.lifecycle.Observer
 import com.crash.alpaca.R
 import com.crash.alpaca.adapter.MemoRoomAdapter
 import com.crash.alpaca.data.Memo
-import com.crash.alpaca.data.MemoRoom
 import com.crash.alpaca.databinding.MemoRoomFragmentBind
-import com.crash.alpaca.db.AlpacaRepository
 import com.crash.alpaca.dialog.MemoDialogFragment
 import com.crash.alpaca.dialog.MemoRoomDialogFragment
 import com.crash.alpaca.viewmodel.MemoRoomFragmentViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class MemoRoomFragment : Fragment() {
-    companion object {
-        private const val TAG = "MemoRoomFragment"
-    }
 
     interface MemoRoomFragmentCallback {
         fun onClickAddMemo()

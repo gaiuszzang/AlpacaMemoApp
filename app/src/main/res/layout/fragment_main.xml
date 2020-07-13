@@ -4,23 +4,25 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     >
     <data class="MainFragmentBind">
-        <variable name="vm" type="com.crash.alpaca.viewmodel.MainFragmentViewModel" />
+        <variable name="vm" type="com.crash.alpaca.viewmodel.MainViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
+
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/appbarlayout_height"
             android:background="@color/colorPrimary"
             app:elevation="0dp"
             app:expanded="true">
+
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_scrollFlags="scroll|snap|exitUntilCollapsed">
+
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
@@ -29,7 +31,8 @@
                     android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
                     app:elevation="0dp"
                     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                    app:layout_collapseMode="pin"/>
+                    app:layout_collapseMode="pin" />
+
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
 
