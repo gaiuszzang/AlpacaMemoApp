@@ -17,8 +17,7 @@ class MainViewModel : ViewModel() {
 
     val showMemoEvent: LiveData<Int> = SingleEvent()
     val selectMode: LiveData<Boolean> = MutableLiveData(false)
-    val selectedRooms: LiveData<List<MemoRoom>> = MutableLiveData()
-    private val _selectedRooms = mutableListOf<MemoRoom>()
+    val selectedRooms: MutableLiveData<MutableList<MemoRoom>> = MutableLiveData(mutableListOf())
 
     fun loadMemoRooms(): LiveData<List<MemoRoom>> {
         return AlpacaRepository.alpacaDao().getAllMemoRoomList()
@@ -26,21 +25,18 @@ class MainViewModel : ViewModel() {
 
     fun removeMemoRooms() {
         viewModelScope.launch(Dispatchers.Default) {
-            if (_selectedRooms.isNotEmpty()) {
+            if (selectedRooms.value!!.isNotEmpty()) {
                 withContext(Dispatchers.IO) {
-                    AlpacaRepository.alpacaDao().deleteMemoRoom(_selectedRooms)
+                    AlpacaRepository.removeMemoRooms(selectedRooms.value!!)
                 }
-                _selectedRooms.clear()
-                (selectedRooms as MutableLiveData).postValue(_selectedRooms)
-
+                selectedRooms.postValue(mutableListOf())
                 setSelectMode(false)
             }
         }
     }
 
     fun onBackPress() = if (selectMode.value == true) {
-        _selectedRooms.clear()
-        (selectedRooms as MutableLiveData).postValue(_selectedRooms)
+        selectedRooms.postValue(mutableListOf())
         (selectMode as MutableLiveData).postValue(false)
         true
     } else {
@@ -49,14 +45,14 @@ class MainViewModel : ViewModel() {
 
     fun onClickMemoRoom(memoRoom: MemoRoom) {
         if (selectMode.value == true) {
-            if (_selectedRooms.removeIf { it == memoRoom }) {
-                if (_selectedRooms.isEmpty()) {
+            if (selectedRooms.value!!.removeIf { it == memoRoom }) {
+                if (selectedRooms.value!!.isEmpty()) {
                     setSelectMode(false)
                 }
             } else {
-                _selectedRooms.add(memoRoom)
+                selectedRooms.value!!.add(memoRoom)
             }
-            (selectedRooms as MutableLiveData).postValue(_selectedRooms)
+            selectedRooms.postValue(selectedRooms.value)
         } else {
             (showMemoEvent as MutableLiveData).postValue(memoRoom.id)
         }
