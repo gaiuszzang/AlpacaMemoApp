@@ -23,7 +23,7 @@ class MemoRoomDialogViewModel : ViewModel() {
     }
 
     fun loadMemoRoom(id: Int) {
-        val memoRoom = AlpacaRepository.alpacaDao().findMemoRoom(id)
+        val memoRoom = AlpacaRepository.getMemoRoom(id)
         var memoRoomObserver = Observer<MemoRoom?> {
             memoRoomId.value = it?.id
             title.value = it?.title
@@ -43,19 +43,9 @@ class MemoRoomDialogViewModel : ViewModel() {
                 return@launch
             }
             val memoRoom = withContext(Dispatchers.IO) {
-                lateinit var memoRoom : MemoRoom
                 val roomType = if (typeNormal.value!!) MemoRoom.TYPE_NORMAL else MemoRoom.TYPE_DIARY
                 val hidden = if (isHidden.value!!) MemoRoom.VISIBILITY_HIDDEN else MemoRoom.VISIBILITY_SHOW
-
-                if (memoRoomId.value == -1) {
-                    val newMemoRoomId = AlpacaRepository.alpacaDao().getMaxMemoRoomId() + 1
-                    memoRoom = MemoRoom(newMemoRoomId, title.value!!, roomType, hidden)
-                    AlpacaRepository.alpacaDao().insertMemoRoom(memoRoom)
-                } else {
-                    memoRoom = MemoRoom(memoRoomId.value!!, title.value!!, roomType, hidden)
-                    AlpacaRepository.alpacaDao().updateMemoRoom(memoRoom)
-                }
-                return@withContext memoRoom
+                return@withContext AlpacaRepository.saveMemoRoom(memoRoomId.value!!, title.value!!, roomType, hidden)
             }
             callback(memoRoom, null)
         }

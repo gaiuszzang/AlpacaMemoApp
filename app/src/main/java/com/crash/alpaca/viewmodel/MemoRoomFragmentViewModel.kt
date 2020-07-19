@@ -10,7 +10,6 @@ import com.crash.alpaca.data.Memo
 import com.crash.alpaca.data.MemoRoom
 import com.crash.alpaca.db.AlpacaRepository
 import kotlinx.coroutines.*
-import java.util.*
 
 class MemoRoomFragmentViewModel : ViewModel() {
 
@@ -19,11 +18,11 @@ class MemoRoomFragmentViewModel : ViewModel() {
     var roomId: Int = -1
 
     fun loadMemo(): LiveData<List<Memo>> {
-        return AlpacaRepository.alpacaDao().getMemoList(roomId)
+        return AlpacaRepository.getMemoList(roomId)
     }
 
     fun loadMemoRoom(): LiveData<MemoRoom?> {
-        return AlpacaRepository.alpacaDao().findMemoRoom(roomId)
+        return AlpacaRepository.getMemoRoom(roomId)
     }
 
     fun addMemo() {
@@ -33,9 +32,7 @@ class MemoRoomFragmentViewModel : ViewModel() {
                 return@launch
             }
             withContext(Dispatchers.IO) {
-                val msgId =  UUID.randomUUID().toString()
-                val memo = Memo(msgId, roomId, content, System.currentTimeMillis())
-                AlpacaRepository.alpacaDao().insertMemo(memo)
+                AlpacaRepository.addMemo(roomId, content)
             }
             userMsg.value = ""
         }

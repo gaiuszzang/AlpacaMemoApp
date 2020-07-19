@@ -20,7 +20,7 @@ class MainViewModel : ViewModel() {
     val selectedRooms: MutableLiveData<MutableList<MemoRoom>> = MutableLiveData(mutableListOf())
 
     fun loadMemoRooms(): LiveData<List<MemoRoom>> {
-        return AlpacaRepository.alpacaDao().getAllMemoRoomList()
+        return AlpacaRepository.getMemoRoomList()
     }
 
     fun removeMemoRooms() {

@@ -23,18 +23,7 @@ class AlarmDialogViewModel : ViewModel() {
         viewModelScope.launch {
             val newAlarmTime = timeString.value!!.toLong()
             val alarm = withContext(Dispatchers.IO) {
-                lateinit var newAlarm: Alarm
-                if (alarm.value != null) {
-                    //Update Alarm
-                    newAlarm = alarm.value!!.copy(alarmTime = newAlarmTime)
-                    AlpacaRepository.alpacaDao().updateAlarm(newAlarm)
-                } else {
-                    //Create Alarm
-                    val newAlarmId = AlpacaRepository.alpacaDao().getMaxAlarmId() + 1
-                    newAlarm = Alarm(id = newAlarmId, memoId = memo.value!!.id, alarmTime = newAlarmTime)
-                    AlpacaRepository.alpacaDao().insertAlarm(newAlarm)
-                }
-                return@withContext newAlarm
+                return@withContext AlpacaRepository.saveAlarm(alarm.value, memo.value!!, newAlarmTime)
             }
             callback(alarm, null)
         }

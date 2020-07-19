@@ -20,7 +20,7 @@ class MemoDialogViewModel : ViewModel() {
 
     fun init(m: Memo) {
         memo.value = m
-        alarm = AlpacaRepository.alpacaDao().getAlarmByMemoId(m.id)
+        alarm = AlpacaRepository.getAlarmByMemoId(m.id)
     }
 
     fun copyMemoToClipboard() {
@@ -32,7 +32,7 @@ class MemoDialogViewModel : ViewModel() {
     fun removeMemo() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                AlpacaRepository.alpacaDao().deleteMemo(memo.value!!)
+                AlpacaRepository.removeMemo(memo.value!!)
             }
         }
     }
@@ -40,7 +40,7 @@ class MemoDialogViewModel : ViewModel() {
     fun removeAlarm() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                AlpacaRepository.alpacaDao().deleteAlarm(alarm.value!!)
+                AlpacaRepository.removeAlarm(alarm.value!!)
             }
         }
     }
